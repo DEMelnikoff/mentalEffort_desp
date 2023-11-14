@@ -6,36 +6,13 @@ const exp = (function() {
     let p = {};
 
     let settings = {
-        hitRates: [[.5, .9], [.9, .5]][Math.floor(Math.random() * 2)],
-        adjustment: [0, .4][Math.floor(Math.random() * 2)],
+        gameType: ['streak', 'bern'][Math.floor(Math.random() * 2)],
+        difficulty: [['easy', 'hard'], ['hard', 'easy']][Math.floor(Math.random() * 2)],
         nTrials: 40,
         colors: [['purple', 'orange'], ['orange', 'purple']][Math.floor(Math.random() * 2)],
     };
 
-    settings.hitRates[0] = Math.round((settings.hitRates[0] - settings.adjustment) * 100) / 100;
-    settings.hitRates[1] = Math.round((settings.hitRates[1] - settings.adjustment) * 100) / 100;
-
-    if (settings.hitRates[0] == .1) {
-        settings.durationText_1 = "very little time";
-        settings.durationText_2 = "a moderate amount of time";
-    } else if (settings.hitRates[0] == .9) {
-        settings.durationText_1 = "plenty of time";
-        settings.durationText_2 = "a moderate amount of time";
-    } else if (settings.hitRates[1] == .1) {
-        settings.durationText_1 = "a moderate amount of time";
-        settings.durationText_2 = "very little time";
-    } else if (settings.hitRates[1] == .9) {
-        settings.durationText_1 = "a moderate amount of time";
-        settings.durationText_2 = "plenty of time";
-    };
-    
-
-    if (settings.hitRates[0] < settings.hitRates[1]) {
-        settings.effort = ['easy', 'hard'];
-    } else {
-        settings.effort = ['hard', 'easy'];
-    };
-
+    console.log(settings.gameType, settings.difficulty);
 
     if (settings.colors[0] == 'purple') {
         settings.gameName_1 = `<span class='purple-game'>Purple Game</span>`;
@@ -49,72 +26,31 @@ const exp = (function() {
         settings.hex_2 = 'purple';
     };
 
-    const getArrays = function(settings, round) {
-
-        // shuffle function
-        function shuffle(obj1) {
-          let index = obj1.length;
-          let rnd, tmp1;
-
-          while (index) {
-            rnd = Math.floor(Math.random() * index);
-            index -= 1;
-            tmp1 = obj1[index];
-            obj1[index] = obj1[rnd];
-            obj1[rnd] = tmp1;
-          }
-        };
-
-        // get total number of wins and losses
-        let nWins = settings.hitRates[round] * settings.nTrials;
-        let nLoss = settings.nTrials - nWins;
-
-        // create array of M states
-        let winArray = Array(nWins).fill(-1);
-        let lossArray = Array(nLoss).fill(1);
-        let m_array = winArray.concat(lossArray);
-
-        // shuffle arrays and add back final trial
-        shuffle(m_array);
-
-        return m_array;
-    };
-
-    console.log(settings.hitRates);
-
-    const m_array_1 = getArrays(settings, 0);
-    const m_array_2 = getArrays(settings, 1);
-    const m_array = m_array_1.concat(m_array_2);
 
     let text = {};
 
-    if (settings.effort[0] == 'hard') {
+    if (settings.difficulty[0] == 'hard') {
         text.example_1 = `<span style="color: ${settings.hex_1}">>><>></span>`;
         text.arrowOrArrows = 'middle arrow';
         text.pointOrPoints = 'points';
         text.exception1 = `<p>First, in the ${settings.gameName_2}, each cue is made up of ${settings.colors[1]} arrows.</p>
         <p>Second, the middle arrow always points in the same direction as the other arrows (e.g., <span style="color: ${settings.hex_2}"><<<<<</span>).</p>
         <p>Therefore, you no longer have to focus exclusively on the middle arrow. You can simply indicate the direction in which all the arrows are pointing.</p>`;
-        text.exception2 = `<p>The ${settings.gameName_2} is designed to ensure that players win fewer rounds than in the ${settings.gameName_1}.</p>
-        <p>Specifically, the ${settings.gameName_2} is designed to ensure that players win <b>${settings.hitRates[1] * 100}%</b> of their rounds; players have ${settings.durationText_2} to complete reach round, ensuring that they reach the target score approximately <b>${settings.hitRates[1] * 100}%</b> of the time.</p>`;
-
-    } else if (settings.effort[0] == 'easy') {
+        text.exception2 = `<p>The ${settings.gameName_2} is designed to ensure that players win fewer rounds than in the ${settings.gameName_1}.</p>`
+    } else if (settings.difficulty[0] == 'easy') {
         text.example_1 = `<span style="color: ${settings.hex_1}"><<<<<</span>`;
         text.arrowOrArrows = 'arrows';
         text.pointOrPoints = 'point';
         text.exception1 = `<p>First, in the ${settings.gameName_2}, each cue is made up of ${settings.colors[1]} arrows.</p>
         <p>Second, you must indicate the direction of the <b>middle arrow only</b>.</p>
         <p>Sometimes, the middle arrow will point in the same direction as the other arrows (e.g., <span style="color: ${settings.hex_2}"><<<<<</span>), and other times it will point in the opposite direction (e.g., <span style="color: ${settings.hex_2}"><<><<</span>). You must indicate the direction of the middle arrow only, regardless of whether it matches the other arrows.</p>`;
-        text.exception2 = `<p>The ${settings.gameName_2} is designed to ensure that players win more rounds than in the ${settings.gameName_1}.</p>
-        <p>Specifically, the ${settings.gameName_2} is designed to ensure that players win <b>${settings.hitRates[1] * 100}%</b> of their rounds; players have ${settings.durationText_2} to complete reach round, ensuring that they reach the target score approximately <b>${settings.hitRates[1] * 100}%</b> of the time.</p>`;
-
+        text.exception2 = `<p>The ${settings.gameName_2} is designed to ensure that players win more rounds than in the ${settings.gameName_1}.</p>`
     };
 
     jsPsych.data.addProperties({
-        hitRate_1: settings.hitRates[0],
-        hitRate_2: settings.hitRates[1],
-        effort_1: settings.effort[0],
-        effort_2: settings.effort[1],
+        gameType: settings.gameType,
+        difficulty_1: settings.difficulty[0],
+        difficulty_2: settings.difficulty[1],
     });
 
    /*
@@ -128,16 +64,8 @@ const exp = (function() {
 
         let gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
 
-        let correctAnswers_1 = [`10`, `${settings.hitRates[0] * 100}%`];
-        let correctAnswers_2;
-
-        if (settings.effort[0] == 'easy' && round == 1 || settings.effort[1] == 'easy' && round == 2) {
-            correctAnswers_1.push(`For each cue, I must indicate the direction of the arrows.`);
-            correctAnswers_2 = [`In the ${settings.gameName_2}, all arrows will point in the same direction.`, `${settings.hitRates[1] * 100}%`];
-        } else if (settings.effort[0] == 'hard' && round == 1 || settings.effort[1] == 'hard' && round == 2) {
-            correctAnswers_1.push(`For each cue, I must indicate the direction of the middle arrow only.`);
-            correctAnswers_2 = [`In the ${settings.gameName_2}, I must indicate the direction of the middle arrow only.`, `${settings.hitRates[1] * 100}%`];
-        };
+        let correctAnswers_1 = [`10`, `50%`, `For each cue, I must indicate the direction of the arrows.`];
+        let correctAnswers_2 = [`In the ${settings.gameName_2}, all arrows will point in the same direction.`, `50%`];
 
         let attnChk;
 
@@ -168,10 +96,6 @@ const exp = (function() {
                 on_finish: (data) => {
                     const totalErrors = dmPsych.getTotalErrors(data, correctAnswers_1);
                     data.totalErrors = totalErrors;
-                    if (totalErrors > 0) {
-                        jsPsych.data.addProperties({boot: true, bootReason: 'attention'});
-                        jsPsych.endExperiment("The experiment has ended early due to erroneous responding.");
-                    };
                 },
             };
         } else if (round == 2) {
@@ -196,10 +120,6 @@ const exp = (function() {
                 on_finish: (data) => {
                     const totalErrors = dmPsych.getTotalErrors(data, correctAnswers_2);
                     data.totalErrors = totalErrors;
-                    if (totalErrors > 0) {
-                        jsPsych.data.addProperties({boot: true, bootReason: 'attention'});
-                        jsPsych.endExperiment("The experiment has ended early due to erroneous responding.");
-                    };
                 },
             };
         }
@@ -268,13 +188,6 @@ const exp = (function() {
                         <div class="your-score">Your Score:<br><br><span style="color:red; font-weight:bold">8</span></div>
                         <div class="flanker-text" style="color:red">You lost!</div>
                         </div>`
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>The ${settings.gameName_1} is designed to ensure that players win approximately <b>${settings.hitRates[0] * 100}%</b> of their rounds.</p>
-                        <p>Specifically, players have ${settings.durationText_1} to complete reach round, ensuring that they reach the target score approximately <b>${settings.hitRates[0] * 100}%</b> of the time.</p>`
                     },
                 ],
             ],
@@ -425,111 +338,122 @@ const exp = (function() {
     // temporary variables for flanker task
 
 
-    let score_feedback;
-    let target_score;
-    let feedbackText;
-    let win;
-    let trial = 0;
-    let total_wins = 0;
-    let stim;
+    let correct, wordNum, hexNum;
+    let trial = 1;
+    const colors = ['blue', 'red', 'green', 'yellow'];
+    const hexs = ['blue', '#ff0000', '#009900', '#FFCC33'];
+    const keys = ['b', 'r', 'g', 'y'];
 
-    const generateRandomString = (condition) => {
-        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-        let randomString = '';
-        let randomIndex = Math.floor(Math.random() * alphabet.length);
-        let randomLetter = alphabet[randomIndex];
 
-        while (randomString.length < 5) {
-          const randomIndex = Math.floor(Math.random() * alphabet.length);
-          const randomLetter = alphabet[randomIndex];
-          if (condition == 'easy') {
-            return randomLetter.repeat(5);
-          };
-          if (randomString.indexOf(randomLetter) === -1) {
-            randomString += randomLetter;
-          };
+    const MakeTimeline = function(round, gameType, isPractice) {
+
+        // html
+        const headerViz = (gameType == 'bern') ? 'hidden' : 'visible';
+        const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}"></div>' + '<div class="stroop-stim" style="color:{stimColor}">{stimContent}</div>' +'</div>';
+        const feedbackArea = '<div class="play-area">{token-text}{extra-text}</div>';
+        const winText = '<div class="win-text">+10 Tokens</div>';
+        const lossText = '<div class="loss-text">+0 Tokens</div>';
+        const plusText = '<div class="plus-text">+5 Bonus</div>';
+        const minusText = '<div class="minus-text">-5 Loss</div>';
+
+        // make array of token outcomes 
+        const makeTokenArray = function() {
+          return jsPsych.randomization.repeat(['plus', 'minus', 'normal', 'normal', 'normal'], 1);
         };
-        return randomString;
-    };
 
+        let tokenArray_win = makeTokenArray();
+        let tokenArray_loss = makeTokenArray();
 
-    const MakeTimeline = function(round, isPractice) {
-
-
-        const fixation = {
-            type:jsPsychHtmlKeyboardResponse,
-            stimulus: function() {
-                stim = generateRandomString("hard");
-                const html = `<div class="outcome-container-lose">
-                <div class="flanker-symbol" style="color: ${[settings.hex_1, settings.hex_2][0]}">${stim}</div></div>`;
-                return html;
-            },
-            choices: "NO_KEYS",
-            trial_duration: 2000,
-        };
+        // variables for streak condition
+        let streak = 0;
+        let finalStreak;
 
         const iti = {
             type:jsPsychHtmlKeyboardResponse,
+            stimulus: () => {
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '');
+            },
+            choices: "NO_KEYS",
+            trial_duration: () => {
+                let latency = Math.floor(Math.random() * 1500 + 250);
+                return latency;
+            },
+            data: {phase: 'iti', round: round},
+            on_finish: (data) => {
+                data.trial_idx = trial;
+            },
+        };
+
+        const response = {
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                const html_stim = `<div class="outcome-container-lose"><div class="flanker-symbol" style="color: ${[settings.hex_1, settings.hex_2][0]}">${stim}</div></div>`;
-                const html_blank = `<div class="outcome-container-lose"><div class="flanker-symbol" style="color: ${[settings.hex_1, settings.hex_2][0]}"></div></div>`;
-                if (settings.effort[round] == "easy") {
-                    return html_stim;
-                } else if (settings.effort[round] == "hard") {
-                    return html_blank;                    
-                };
+                wordNum = Math.floor(Math.random() * 4);
+                hexNum = (settings.difficulty[round] == 'easy') ? wordNum : Math.floor(Math.random() * 4);
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replace('{stimColor}', hexs[hexNum]).replace('{stimContent}', colors[wordNum]);
+            },
+            trial_duration: 700,
+            data: {phase: 'response', round: round},
+            on_finish: (data) => {
+                correct = (data.response == keys[hexNum]) ? 1 : 0;
+                data.trial_idx = trial;
+                data.practice = isPractice;
+                data.correct = correct;
+            },
+        };
+
+        const outcome = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: function() {
+                let tileColor = (correct == 1) ? hexs[hexNum] : 'white';
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{stimColor}', 'white').replace('{stimContent}', colors[wordNum]);
             },
             choices: "NO_KEYS",
             trial_duration: 1000,
-        };
-
-        const flanker = {
-            type: jsPsychFlanker,
-            stimulus: function() {
-                let effort = settings.effort[round];
-                let outcome = m_array[trial];
-                return [effort, outcome, stim];
-            },
-            response_ends_trial: false,
-            trial_duration: 10000,
-            color: [settings.hex_1, settings.hex_2][round],
-            on_finish: function(data) {
-                score_feedback = data.score;
-                data.round = round + 1;
+            data: {phase: 'outcome', round: round},
+            on_finish: (data) => {
+                if (correct == 1) {
+                    streak++;
+                } else {
+                    finalStreak = streak;
+                    streak = 0;
+                }
+                data.trial_idx = trial;
                 data.practice = isPractice;
-                if (data.errors == 0 && data.score == 0) {
-                    jsPsych.data.addProperties({boot: true, bootReason: 'inactivity'});
-                    jsPsych.endExperiment("The experiment has ended early due to inactivity.");
-                };
             },
         };
 
-        const feedback = {
+        const tokens = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                if (score_feedback < 5) {
-                    color = 'red'
-                    feedbackContent = `<div class="flanker-text" style="color:${color}">You lost!</div>`
-
+                let standardFeedback;
+                if (correct == 1) {
+                    standardFeedback = winText;
+                } else if (gameType == 'bern') {
+                    standardFeedback = lossText;
+                } else if (finalStreak == 0) {
+                    standardFeedback = lossText;
+                } else if (finalStreak > 0) {
+                    standardFeedback = winText.replace('10', `${10 * finalStreak}`)
+                };
+                let bonusFeedbackType = (correct == 1) ? tokenArray_win.pop() : tokenArray_loss.pop();
+                let bonusFeedback = (bonusFeedbackType == 'plus') ? plusText : (bonusFeedbackType == 'minus') ? minusText : '';
+                if (gameType == 'streak' && correct == 1) {
+                    return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '');
                 } else {
-                    color = 'green'; 
-                    feedbackContent = `<div class="trophy"><img src="./img/trophy.png" height="250px"></div>`
+                    return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback);
                 }
-                let html = `<div class="outcome-container-lose">
-                <div class="your-score">Your Score:<br><br><span style="color:${color}; font-weight:bold">${score_feedback}</span></div>
-                ${feedbackContent}
-                </div>`;
-                return html;
             },
             choices: "NO_KEYS",
-            trial_duration: 2000,
+            trial_duration: 1500,
+            data: {phase: 'feedback', round: round},
             on_finish: function(data) {
-                data.score = score_feedback;
-                if (score_feedback < 10) {
-                    data.outcome = "lose";
-                } else {
-                    data.outcome = "win";
-                }
+                if (tokenArray_win.length == 0) {
+                    tokenArray_win = makeTokenArray();
+                };
+                if (tokenArray_loss.length == 0) {
+                    tokenArray_loss = makeTokenArray();
+                };
+                data.trial_idx = trial;
                 trial++;
                 data.round = round + 1;
                 data.practice = isPractice;
@@ -537,20 +461,20 @@ const exp = (function() {
         };
 
         if (!isPractice) {
-            this.timeline = [fixation, iti, flanker, feedback];
+            this.timeline = [iti, response, outcome, tokens];
             this.repetitions = settings.nTrials;
         } else {
-            this.timeline = [fixation, iti, flanker];
+            this.timeline = [iti, response, outcome];
             this.repetitions = 4;            
         }
 
 
     };
 
-    const flanker_timeline_p1 = new MakeTimeline(0, true);
-    const flanker_timeline_p2 = new MakeTimeline(1, true);
-    const flanker_timeline_1 = new MakeTimeline(0, false);
-    const flanker_timeline_2 = new MakeTimeline(1, false);
+    const flanker_timeline_p1 = new MakeTimeline(0, settings.gameType, true);
+    const flanker_timeline_p2 = new MakeTimeline(1, settings.gameType, true);
+    const flanker_timeline_1 = new MakeTimeline(0, settings.gameType, false);
+    const flanker_timeline_2 = new MakeTimeline(1, settings.gameType, false);
 
 
    /*
@@ -865,6 +789,6 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.consent, exp.intro_1, exp.leftOrRight_timeline_1, exp.intro_2, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
+const timeline = [exp.leftOrRight_timeline_2, exp.consent, exp.intro_1, exp.leftOrRight_timeline_1, exp.intro_2, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);
