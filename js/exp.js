@@ -349,7 +349,7 @@ const exp = (function() {
 
         // html
         const headerViz = (gameType == 'bern') ? 'hidden' : 'visible';
-        const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}"></div>' + '<div class="stroop-stim" style="color:{stimColor}">{stimContent}</div>' +'</div>';
+        const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}"></div>' + '<div class="stroop-stim" style="color:{stimColor}">{stimContent}</div>' +'</div>';
         const feedbackArea = '<div class="play-area">{token-text}{extra-text}</div>';
         const winText = '<div class="win-text">+10 Tokens</div>';
         const lossText = '<div class="loss-text">+0 Tokens</div>';
@@ -391,7 +391,7 @@ const exp = (function() {
                 hexNum = (settings.difficulty[round] == 'easy') ? wordNum : Math.floor(Math.random() * 4);
                 return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replace('{stimColor}', hexs[hexNum]).replace('{stimContent}', colors[wordNum]);
             },
-            trial_duration: 700,
+            trial_duration: 750,
             data: {phase: 'response', round: round},
             on_finish: (data) => {
                 correct = (data.response == keys[hexNum]) ? 1 : 0;
@@ -404,8 +404,10 @@ const exp = (function() {
         const outcome = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                let tileColor = (correct == 1) ? hexs[hexNum] : 'white';
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{stimColor}', 'white').replace('{stimContent}', colors[wordNum]);
+                let tileColor = (correct == 1) ? '#b3b3b3' : 'white';
+                let stimColor = (correct == 1) ? hexs[hexNum] : 'white';
+                let borderStyle = (correct == 1) ? '5px solid black' : null;
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replace('{stimColor}', stimColor).replace('{stimContent}', colors[wordNum]);
             },
             choices: "NO_KEYS",
             trial_duration: 1000,
