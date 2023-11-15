@@ -647,14 +647,15 @@
 
 .play-area {
     position: relative;
-    width: 900px; 
-    height: 700px;
+    width: 1000px; 
+    height: 800px;
     text-align: center; 
+    border: 2px solid black;
 }
 
 .header {
     position: absolute;
-    top: 15%;
+    top: 5%;
     left: 50%;
     transform: translate(-50%, -50%); 
     font-size: 40px;
@@ -663,8 +664,8 @@
 .tile {
     position: absolute;
     border: null;
-    width: 300px; 
-    height: 300px;
+    width: 225px; 
+    height: 225px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -675,7 +676,7 @@
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    font-size: 80px;
+    font-size: 70px;
 }
 
 .win-text {

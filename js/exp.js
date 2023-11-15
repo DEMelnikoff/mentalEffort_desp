@@ -338,18 +338,38 @@ const exp = (function() {
     // temporary variables for flanker task
 
 
-    let correct, wordNum, hexNum;
-    let trial = 1;
-    const colors = ['blue', 'red', 'green', 'yellow'];
-    const hexs = ['blue', '#ff0000', '#009900', '#FFCC33'];
-    const keys = ['b', 'r', 'g', 'y'];
-
-
     const MakeTimeline = function(round, gameType, isPractice) {
+
+        let correct, stim;
+        let trial = 1;
+        const congruentStim = [
+            ['blue', 'blue', '20%', '30%', 'q'], 
+            ['blue', 'blue', '20%', '80%', 'q'], 
+            ['red', '#ff0000', '80%', '30%', 'p'], 
+            ['red', '#ff0000', '80%', '80%', 'p'],
+        ];
+        const incongruentStim = [
+            ['blue', 'blue', '80%', '30%', 'q'], 
+            ['blue', 'blue', '80%', '80%', 'q'], 
+            ['blue', '#ff0000', '20%', '30%', 'q'], 
+            ['blue', '#ff0000', '20%', '80%', 'q'],
+            ['blue', '#ff0000', '80%', '30%', 'q'], 
+            ['blue', '#ff0000', '80%', '80%', 'q'],
+            ['blue', '#ff0000', '80%', '30%', 'q'], 
+            ['blue', '#ff0000', '80%', '80%', 'q'], 
+            ['red', '#ff0000', '20%', '30%', 'p'], 
+            ['red', '#ff0000', '20%', '80%', 'p'],
+            ['red', 'blue', '80%', '30%', 'p'], 
+            ['red', 'blue', '80%', '80%', 'p'],
+            ['red', 'blue', '20%', '30%', 'p'], 
+            ['red', 'blue', '20%', '80%', 'p'],
+            ['red', 'blue', '20%', '30%', 'p'], 
+            ['red', 'blue', '20%', '80%', 'p'],
+        ];
 
         // html
         const headerViz = (gameType == 'bern') ? 'hidden' : 'visible';
-        const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}"></div>' + '<div class="stroop-stim" style="color:{stimColor}">{stimContent}</div>' +'</div>';
+        const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}; top:{yPos}; left:{xPos}"></div>' + '<div class="stroop-stim" style="color:{stimColor}; top:{yPos}; left:{xPos}">{stimContent}</div>' +'</div>';
         const feedbackArea = '<div class="play-area">{token-text}{extra-text}</div>';
         const winText = '<div class="win-text">+10 Tokens</div>';
         const lossText = '<div class="loss-text">+0 Tokens</div>';
@@ -387,14 +407,13 @@ const exp = (function() {
         const response = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                wordNum = Math.floor(Math.random() * 4);
-                hexNum = (settings.difficulty[round] == 'easy') ? wordNum : Math.floor(Math.random() * 4);
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replace('{stimColor}', hexs[hexNum]).replace('{stimContent}', colors[wordNum]);
+                stim = (settings.difficulty[round] == 'easy') ? congruentStim[Math.floor(Math.random() * congruentStim.length)] : incongruentStim[Math.floor(Math.random() * incongruentStim.length)];
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]);
             },
-            trial_duration: 750,
+            trial_duration: 700,
             data: {phase: 'response', round: round},
             on_finish: (data) => {
-                correct = (data.response == keys[hexNum]) ? 1 : 0;
+                correct = (data.response == stim[4]) ? 1 : 0;
                 data.trial_idx = trial;
                 data.practice = isPractice;
                 data.correct = correct;
@@ -405,12 +424,12 @@ const exp = (function() {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
                 let tileColor = (correct == 1) ? '#b3b3b3' : 'white';
-                let stimColor = (correct == 1) ? hexs[hexNum] : 'white';
+                let stimColor = (correct == 1) ? stim[1] : 'white';
                 let borderStyle = (correct == 1) ? '5px solid black' : null;
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replace('{stimColor}', stimColor).replace('{stimContent}', colors[wordNum]);
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stim[0]);
             },
             choices: "NO_KEYS",
-            trial_duration: 1000,
+            trial_duration: 1250,
             data: {phase: 'outcome', round: round},
             on_finish: (data) => {
                 if (correct == 1) {
@@ -446,7 +465,7 @@ const exp = (function() {
                 }
             },
             choices: "NO_KEYS",
-            trial_duration: 1500,
+            trial_duration: 2000,
             data: {phase: 'feedback', round: round},
             on_finish: function(data) {
                 if (tokenArray_win.length == 0) {
