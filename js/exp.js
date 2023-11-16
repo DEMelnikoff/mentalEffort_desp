@@ -351,19 +351,19 @@ const exp = (function() {
         const incongruentStim = [
             ['blue', 'blue', '80%', '30%', 'q'], 
             ['blue', 'blue', '80%', '80%', 'q'], 
-            ['blue', '#ff0000', '20%', '30%', 'q'], 
+            ['blue', '#ff0000', '80%', '30%', 'p'], 
             ['blue', '#ff0000', '20%', '80%', 'q'],
-            ['blue', '#ff0000', '80%', '30%', 'q'], 
+            ['blue', '#ff0000', '20%', '30%', 'p'], 
             ['blue', '#ff0000', '80%', '80%', 'q'],
-            ['blue', '#ff0000', '80%', '30%', 'q'], 
-            ['blue', '#ff0000', '80%', '80%', 'q'], 
+            ['blue', '#ff0000', '20%', '30%', 'p'], 
+            ['blue', '#ff0000', '80%', '80%', 'q'],
             ['red', '#ff0000', '20%', '30%', 'p'], 
             ['red', '#ff0000', '20%', '80%', 'p'],
-            ['red', 'blue', '80%', '30%', 'p'], 
+            ['red', 'blue', '20%', '30%', 'q'], 
             ['red', 'blue', '80%', '80%', 'p'],
-            ['red', 'blue', '20%', '30%', 'p'], 
+            ['red', 'blue', '80%', '30%', 'q'], 
             ['red', 'blue', '20%', '80%', 'p'],
-            ['red', 'blue', '20%', '30%', 'p'], 
+            ['red', 'blue', '80%', '30%', 'q'], 
             ['red', 'blue', '20%', '80%', 'p'],
         ];
 
@@ -407,7 +407,11 @@ const exp = (function() {
         const response = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                stim = (settings.difficulty[round] == 'easy') ? congruentStim[Math.floor(Math.random() * congruentStim.length)] : incongruentStim[Math.floor(Math.random() * incongruentStim.length)];
+                if (settings.difficulty[round] == 'easy') {
+                    stim = (Math.random() > .1) ? congruentStim[Math.floor(Math.random() * congruentStim.length)] : incongruentStim[Math.floor(Math.random() * incongruentStim.length)];
+                } else {
+                    stim = incongruentStim[Math.floor(Math.random() * incongruentStim.length)];
+                }
                 return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]);
             },
             trial_duration: 700,
