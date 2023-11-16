@@ -342,6 +342,7 @@ const exp = (function() {
 
         let correct, stim;
         let trial = 1;
+        
         const congruentStim = [
             ['blue', 'blue', '20%', '30%', 'q'], 
             ['blue', 'blue', '20%', '80%', 'q'], 
@@ -353,19 +354,22 @@ const exp = (function() {
             ['blue', 'blue', '80%', '80%', 'q'], 
             ['blue', '#ff0000', '80%', '30%', 'p'], 
             ['blue', '#ff0000', '20%', '80%', 'q'],
-            ['blue', '#ff0000', '20%', '30%', 'p'], 
-            ['blue', '#ff0000', '80%', '80%', 'q'],
-            ['blue', '#ff0000', '20%', '30%', 'p'], 
-            ['blue', '#ff0000', '80%', '80%', 'q'],
             ['red', '#ff0000', '20%', '30%', 'p'], 
             ['red', '#ff0000', '20%', '80%', 'p'],
             ['red', 'blue', '20%', '30%', 'q'], 
             ['red', 'blue', '80%', '80%', 'p'],
-            ['red', 'blue', '80%', '30%', 'q'], 
-            ['red', 'blue', '20%', '80%', 'p'],
+        ];
+
+        const doubleIncongruentStim = [
+            ['blue', '#ff0000', '20%', '30%', 'p'], 
+            ['blue', '#ff0000', '80%', '80%', 'q'],
             ['red', 'blue', '80%', '30%', 'q'], 
             ['red', 'blue', '20%', '80%', 'p'],
         ];
+
+        let congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
+        let incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
+        let 
 
         // html
         const headerViz = (gameType == 'bern') ? 'hidden' : 'visible';
