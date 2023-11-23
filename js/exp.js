@@ -552,9 +552,9 @@ const exp = (function() {
             ['red', 'blue', '20%', '80%', 'p'],
         ];
 
-        let practiceStim = [congruentStim[0], congruentStim[2], incongruentStim[0], incongruentStim[2], incongruentStim[4], incongruentStim[6], doubleIncongruentStim[0], doubleIncongruentStim[2]];
+        let practiceStim = [congruentStim[0], congruentStim[2], incongruentStim[0], incongruentStim[2], incongruentStim[4], incongruentStim[6]];
         if (practiceType == "word") {
-            practiceStim = [congruentStim[1], congruentStim[3], incongruentStim[1], incongruentStim[3], incongruentStim[5], incongruentStim[7], doubleIncongruentStim[1], doubleIncongruentStim[3]];
+            practiceStim = [congruentStim[1], congruentStim[3], incongruentStim[1], incongruentStim[3], incongruentStim[5], incongruentStim[7]];
         };
 
         let congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
@@ -570,7 +570,7 @@ const exp = (function() {
         const lossText = '<div class="loss-text">+0 Tokens</div>';
         const plusText = '<div class="plus-text">+5 Bonus</div>';
         const minusText = '<div class="minus-text">-5 Loss</div>';
-        let keyLabels = `<div class="keycodes"> <div class="q-key"> Q<br><div class="blue-rec"></div><br>"blue"</div> <div class="p-key"> P<br><div class="red-rec"></div><br>"red"</div> </div>`;
+        let keyLabels = `<div class="keycodes"> <div class="q-key"> Q <div class="blue-rec"></div> "blue" </div> <div class="p-key"> P <div class="red-rec"></div> "red" </div> </div>`;
         if (practiceType == "word") {
             keyLabels = `<div class="keycodes"> <div class="q-key">Q<br>"blue"</div> <div class="p-key">P<br>"red"</div> </div>`;
         } else if (practiceType == "color") {

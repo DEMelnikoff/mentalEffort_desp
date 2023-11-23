@@ -691,21 +691,25 @@
 }
 
 .blue-rec {
-    position: absolute;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
     height: 20px; 
     width: 50px; 
-    left: 50%;
     background: blue;
-    transform: translate(-50%, 15%); 
 }
 
 .red-rec {
-    position: absolute;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
     height: 20px; 
     width: 50px; 
-    left: 50%;
     background: #ff0000;
-    transform: translate(-50%, 15%); 
 }
 
 .play-area {
