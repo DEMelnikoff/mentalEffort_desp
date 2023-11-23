@@ -237,7 +237,7 @@ const exp = (function() {
         cont_btn: "advance",
     };
 
-    p.intro_task = {
+    p.intro_wordReading = {
         type: jsPsychSurvey,
         pages: [
             [
@@ -249,52 +249,237 @@ const exp = (function() {
                     <p>The first game that you'll play is called the ${settings.gameName_1}.</p>
                     <p>To learn about and play the ${settings.gameName_1}, continue to the next screen.</p></p>`
                 },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>The ${settings.gameName_1} takes place in a play area like this one:</p>
+                    <div class="play-area-inst">
+                    </div>`
+                },
+            ],
 
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>Throughout the game, tiles will appear in the play area. On each tile, 
+                    you'll see the word "red" or "blue" written in either red or blue font.</p>
+                    <p>Proceed to see some examples.</p>
+                    <div class="play-area-inst">
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>This tile displays the word "red" in red font...</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:#ff0000; top:25%; left:20%">Red</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>...this tile displays the word "red" in blue font...</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:blue; top:25%; left:80%">Red</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>...this tile displays the word "blue" in blue font...</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:blue; top:75%; left:20%">Blue</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>...and this tile displays the word "blue" in red font.</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:#ff0000; top:75%; left:80%">Blue</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>When a tile appears at the bottom of the play area, you must indicate whether the word is "red" or "blue" (ignoring the font color).</p>
+                    <p>Press Q on your keyboard if the word is "blue," and press P if the word is "red."
+                    <div class="keycodes-inst">
+                        <div class="q-key">Q<br>"blue"</div>
+                        <div class="p-key">P<br>"red"</div>
+                    </div>
+                    <div class="play-area-inst">
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>For example, you should respond to this tile by pressing Q.</p>
+                    <div class="keycodes-inst">
+                        <div class="q-key">Q<br>"blue"</div>
+                        <div class="p-key">P<br>"red"</div>
+                    </div>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:#ff0000; top:75%; left:80%">Blue</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>You should respond to this tile by pressing P.</p>
+                    <div class="keycodes-inst">
+                        <div class="q-key">Q<br>"blue"</div>
+                        <div class="p-key">P<br>"red"</div>
+                    </div>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:blue; top:75%; left:20%">Red</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>If you respond correctly, the tile will "activate" like this:</p>
+                    <div class="keycodes-inst">
+                        <div class="q-key">Q<br>"blue"</div>
+                        <div class="p-key">P<br>"red"</div>
+                    </div>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; border: 5px solid black; top:75%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:blue; top:75%; left:20%">Red</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>If you respond incorrectly, the tile will disappear.</p>
+                    <div class="keycodes-inst">
+                        <div class="q-key">Q<br>"blue"</div>
+                        <div class="p-key">P<br>"red"</div>
+                    </div>
+                    <div class="play-area-inst">
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>To practice identifying the word on each tile, you'll complete a few practice rounds. During the practice rounds, tiles will always appear at the bottom of the play area, so your goal is always to
+                    identify whether the word is "red" or "blue."</p>
+                    <p>Continue to start practicing.</p>`,
+                }
             ],
 
         ],
         button_label_finish: 'Next'
     };
 
-    p.intro_1 = {
+    p.intro_colorNaming = {
         type: jsPsychSurvey,
         pages: [
             [
                 {
                     type: 'html',
-                    prompt: `<p><strong>What makes some activities more immersive and engaging than others?</strong></p>
-                    <p>We're interested in why people feel effortlessly engaged in some activities (such as engrossing video games), but struggle to focus on other activities.</p>
-                    <p>To help us, you'll play two different games. After each game, you'll report how immersed and engaged you felt.</p>
-                    <p>The first game that you'll play is called the ${settings.gameName_1}.</p>
-                    <p>To learn about and play the ${settings.gameName_1}, continue to the next screen.</p></p>`
+                    prompt: `<p>Practice is now complete.</p>
+                    <p>Next, you will learn what happens when a tile appears at the top of the play area.</p>`
                 },
-
             ],
+
             [
                 {
                     type: 'html',
-                    prompt: `<p>The ${settings.gameName_1} takes place over multiple rounds.</p>
-                    <p>In each round, you'll see a series of cues composed of ${settings.colors[0]} arrows (e.g., ${text.example_1}).</p>
-                    For each cue, you must indicate the <b>direction of the ${text.arrowOrArrows}</b>:
-                    <ul>
-                        <li>If the ${text.arrowOrArrows} ${text.pointOrPoints} left, you must press Q on your keyboard.</li>
-                        <li>If the ${text.arrowOrArrows} ${text.pointOrPoints} right, you must press P on your keyboard.</li>
-                    </ul>
-                    <p>For each correct response you make, your score will increase by one.<br>
-                    For instance, if you see ${text.example_1} and press Q, your score will increase by 1.</p>
-                    <p>For every error you make, your score will decrease by one.<br>
-                    For instance, if you see ${text.example_1} and press P, your score will decrease by 1.</p>`
+                    prompt: `<p>When a tile appears at the top of the play area, you must indicate whether the font color is red or blue (ignoring the word).</p>
+                    <p>Press Q if the font is blue, and press P if the font is red.
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q<br><div class="blue-rec"></div> </div>
+                        <div class="p-key"> P<br><div class="red-rec"></div> </div>
+                    </div>
+                    <div class="play-area-inst">
+                    </div>`
                 },
-
             ],
+
             [
                 {
                     type: 'html',
-                    prompt: `<p>To get a feel for the ${settings.gameName_1}, you'll complete multiple practice rounds. During the practice rounds, your goal is to achieve the highest score possible.</p>
+                    prompt: `<p>For example, you should respond to this tile by pressing P.</p>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="blue-rec"></div> </div>
+                        <div class="p-key"> P <div class="red-rec"></div> </div>
+                    </div>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:#ff0000; top:25%; left:80%">Blue</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>You should respond to this tile by pressing Q.</p>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="blue-rec"></div> </div>
+                        <div class="p-key"> P <div class="red-rec"></div> </div>
+                    </div>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:blue; top:25%; left:20%">Red</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>To practice identifying the font color on each tile, you'll complete a few practice rounds. During the practice rounds, tiles will always appear at the top of the play area, so your goal is always to
+                    identify whether the font is red or blue.</p>
                     <p>Continue to start practicing.</p>`,
                 }
             ],
 
+        ],
+        button_label_finish: 'Next'
+    };
+
+    p.intro_combined = {
+        type: jsPsychSurvey,
+        pages: [
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>Practice is now complete.</p>
+                    <p>Now that you've practiced both tasks (naming words and identifying font colors), you'll practice doing both tasks at once.</p>
+                    <p>Specifically, in the next practice session, the tile will sometimes appear at the top of the play area (requiring you to identify the font color).
+                    Other times, the tile will appear at the bottom of the play area (requiring you to identify the word).</p>
+                    <p>Continue when you're ready to practice performing both tasks at once.</p>`
+                },
+            ],
         ],
         button_label_finish: 'Next'
     };
@@ -338,7 +523,7 @@ const exp = (function() {
     // temporary variables for flanker task
 
 
-    const MakeTimeline = function(round, gameType, isPractice) {
+    const MakeTimeline = function(round, gameType, isPractice, practiceType) {
 
         let correct, stim;
         let trial = 1;
@@ -367,18 +552,30 @@ const exp = (function() {
             ['red', 'blue', '20%', '80%', 'p'],
         ];
 
+        let practiceStim = [congruentStim[0], congruentStim[2], incongruentStim[0], incongruentStim[2], incongruentStim[4], incongruentStim[6], doubleIncongruentStim[0], doubleIncongruentStim[2]];
+        if (practiceType == "word") {
+            practiceStim = [congruentStim[1], congruentStim[3], incongruentStim[1], incongruentStim[3], incongruentStim[5], incongruentStim[7], doubleIncongruentStim[1], doubleIncongruentStim[3]];
+        };
+
         let congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
         let incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
-        let 
+        let doubleIncongruentStim_shuffled = jsPsych.randomization.repeat(doubleIncongruentStim, 1);
+        let practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
 
         // html
-        const headerViz = (gameType == 'bern') ? 'hidden' : 'visible';
+        const headerViz = (gameType == 'bern' || isPractice) ? 'hidden' : 'visible';
         const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}; top:{yPos}; left:{xPos}"></div>' + '<div class="stroop-stim" style="color:{stimColor}; top:{yPos}; left:{xPos}">{stimContent}</div>' +'</div>';
         const feedbackArea = '<div class="play-area">{token-text}{extra-text}</div>';
         const winText = '<div class="win-text">+10 Tokens</div>';
         const lossText = '<div class="loss-text">+0 Tokens</div>';
         const plusText = '<div class="plus-text">+5 Bonus</div>';
         const minusText = '<div class="minus-text">-5 Loss</div>';
+        let keyLabels = `<div class="keycodes"> <div class="q-key"> Q<br><div class="blue-rec"></div><br>"blue"</div> <div class="p-key"> P<br><div class="red-rec"></div><br>"red"</div> </div>`;
+        if (practiceType == "word") {
+            keyLabels = `<div class="keycodes"> <div class="q-key">Q<br>"blue"</div> <div class="p-key">P<br>"red"</div> </div>`;
+        } else if (practiceType == "color") {
+            keyLabels = `<div class="keycodes"> <div class="q-key"> Q <div class="blue-rec"></div> </div> <div class="p-key"> P <div class="red-rec"></div> </div> </div>`;
+        };
 
         // make array of token outcomes 
         const makeTokenArray = function() {
@@ -395,7 +592,7 @@ const exp = (function() {
         const iti = {
             type:jsPsychHtmlKeyboardResponse,
             stimulus: () => {
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '');
+                return keyLabels + playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '');
             },
             choices: "NO_KEYS",
             trial_duration: () => {
@@ -411,20 +608,36 @@ const exp = (function() {
         const response = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                if (settings.difficulty[round] == 'easy') {
-                    stim = (Math.random() > .1) ? congruentStim[Math.floor(Math.random() * congruentStim.length)] : incongruentStim[Math.floor(Math.random() * incongruentStim.length)];
+                if (isPractice && practiceType !== "combined") {
+                    stim = practiceStim_shuffled.pop()
+                } else if (practiceType == "combined") {
+                    stim = (Math.random() > .5) ? congruentStim_shuffled.pop() : incongruentStim_shuffled.pop();
+                } else if (settings.difficulty[round] == 'easy') {
+                    stim = (Math.random() > .1) ? congruentStim_shuffled.pop() : incongruentStim_shuffled.pop();
                 } else {
-                    stim = incongruentStim[Math.floor(Math.random() * incongruentStim.length)];
-                }
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]);
+                    stim = (Math.random() > .5) ? incongruentStim_shuffled.pop() : doubleIncongruentStim_shuffled.pop();
+                };
+                return keyLabels + playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]);
             },
-            trial_duration: 700,
+            trial_duration: () => {
+                if (isPractice) {
+                    return 10000;
+                } else {
+                    return 700;
+                }
+            },
             data: {phase: 'response', round: round},
             on_finish: (data) => {
                 correct = (data.response == stim[4]) ? 1 : 0;
                 data.trial_idx = trial;
                 data.practice = isPractice;
                 data.correct = correct;
+                if (congruentStim_shuffled.length == 0 || incongruentStim_shuffled.length == 0 || practiceStim_shuffled.length == 0) {
+                    congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
+                    incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
+                    doubleIncongruentStim_shuffled = jsPsych.randomization.repeat(doubleIncongruentStim, 1);
+                    practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
+                };
             },
         };
 
@@ -434,7 +647,7 @@ const exp = (function() {
                 let tileColor = (correct == 1) ? '#b3b3b3' : 'white';
                 let stimColor = (correct == 1) ? stim[1] : 'white';
                 let borderStyle = (correct == 1) ? '5px solid black' : null;
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stim[0]);
+                return keyLabels + playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stim[0]);
             },
             choices: "NO_KEYS",
             trial_duration: 1250,
@@ -467,9 +680,9 @@ const exp = (function() {
                 let bonusFeedbackType = (correct == 1) ? tokenArray_win.pop() : tokenArray_loss.pop();
                 let bonusFeedback = (bonusFeedbackType == 'plus') ? plusText : (bonusFeedbackType == 'minus') ? minusText : '';
                 if (gameType == 'streak' && correct == 1) {
-                    return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '');
+                    return keyLabels + playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '');
                 } else {
-                    return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback);
+                    return keyLabels + feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback);
                 }
             },
             choices: "NO_KEYS",
@@ -494,16 +707,18 @@ const exp = (function() {
             this.repetitions = settings.nTrials;
         } else {
             this.timeline = [iti, response, outcome];
-            this.repetitions = 4;            
+            this.repetitions = (practiceType == "combined") ? 20 : 10;            
         }
 
 
     };
 
-    const flanker_timeline_p1 = new MakeTimeline(0, settings.gameType, true);
-    const flanker_timeline_p2 = new MakeTimeline(1, settings.gameType, true);
-    const flanker_timeline_1 = new MakeTimeline(0, settings.gameType, false);
-    const flanker_timeline_2 = new MakeTimeline(1, settings.gameType, false);
+    p.wordPractice = new MakeTimeline(0, settings.gameType, true, "word");
+    p.colorPractice = new MakeTimeline(0, settings.gameType, true, "color");
+    p.combinedPractice = new MakeTimeline(0, settings.gameType, true, "combined");
+
+    const flanker_timeline_1 = new MakeTimeline(0, settings.gameType, false, null);
+    const flanker_timeline_2 = new MakeTimeline(1, settings.gameType, false, null);
 
 
    /*
@@ -626,11 +841,11 @@ const exp = (function() {
 
     // timeline: second wheel
     p.leftOrRight_timeline_1 = {
-        timeline: [flanker_timeline_p1, attnChk1, flanker_timeline_1, new MakeFlowQs(settings.gameName_1, 1), new MakeEnjoyQs(settings.gameName_1, 1), new MakeEffortQs(settings.gameName_1, 1)],
+        timeline: [attnChk1, flanker_timeline_1, new MakeFlowQs(settings.gameName_1, 1), new MakeEnjoyQs(settings.gameName_1, 1), new MakeEffortQs(settings.gameName_1, 1)],
     };
 
     p.leftOrRight_timeline_2 = {
-        timeline: [flanker_timeline_p2, attnChk2, flanker_timeline_2, new MakeFlowQs(settings.gameName_2, 2), new MakeEnjoyQs(settings.gameName_2, 2), new MakeEffortQs(settings.gameName_2, 2)],
+        timeline: [attnChk2, flanker_timeline_2, new MakeFlowQs(settings.gameName_2, 2), new MakeEnjoyQs(settings.gameName_2, 2), new MakeEffortQs(settings.gameName_2, 2)],
     };
 
    /*
@@ -818,6 +1033,7 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.leftOrRight_timeline_2, exp.consent, exp.intro_1, exp.leftOrRight_timeline_1, exp.intro_2, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
+const timeline = [exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice,
+    exp.leftOrRight_timeline_1, exp.intro_2, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);

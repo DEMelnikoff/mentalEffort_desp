@@ -645,6 +645,69 @@
     color: black; 
 }
 
+.play-area-inst {
+    position: relative;
+    width: 500px; 
+    height: 400px;
+    text-align: center; 
+    border: 2px solid black;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    margin-top: 50px;
+}
+
+.keycodes-inst {
+    position: relative;
+    width: 500px; 
+    height: 50px;
+    text-align: center; 
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.keycodes {
+    position: relative;
+    width: 1000px; 
+    height: 50px;
+    text-align: center; 
+    margin-bottom: 50px;
+}
+
+.q-key {
+    position: absolute;
+    text-align: center; 
+    width: 150px; 
+    left: 0%;
+    font-size: 20px;
+}
+
+.p-key {
+    position: absolute;
+    text-align: center; 
+    width: 150px; 
+    left: 100%;
+    font-size: 20px;
+    transform: translate(-100%, 0%); 
+}
+
+.blue-rec {
+    position: absolute;
+    height: 20px; 
+    width: 50px; 
+    left: 50%;
+    background: blue;
+    transform: translate(-50%, 15%); 
+}
+
+.red-rec {
+    position: absolute;
+    height: 20px; 
+    width: 50px; 
+    left: 50%;
+    background: #ff0000;
+    transform: translate(-50%, 15%); 
+}
+
 .play-area {
     position: relative;
     width: 1000px; 
@@ -671,12 +734,30 @@
     transform: translate(-50%, -50%);
 }
 
+.tile-inst {
+    position: absolute;
+    border: null;
+    width: 125px; 
+    height: 125px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .stroop-stim {
     position: absolute;
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
     font-size: 70px;
+}
+
+.stroop-stim-inst {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    font-size: 40px;
 }
 
 .win-text {
