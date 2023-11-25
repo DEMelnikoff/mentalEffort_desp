@@ -768,8 +768,9 @@
     position: absolute;
     top: 50%; 
     left: 50%; 
+    width: 600px;
     transform: translate(-50%, -50%); 
-    font-size: 60px;
+    font-size: 70px;
     font-weight: bold;
     color: green;
     text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;
@@ -779,8 +780,9 @@
     position: absolute;
     top: 50%; 
     left: 50%; 
+    width: 600px;
     transform: translate(-50%, -50%); 
-    font-size: 60px;
+    font-size: 70px;
     font-weight: bold;
     color: grey;
     text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;
@@ -790,8 +792,9 @@
     position: absolute;
     top: 70%; 
     left: 50%; 
+    width: 600px;
     transform: translate(-50%, -50%); 
-    font-size: 60px;
+    font-size: 70px;
     font-weight: bold;
     color: yellow;
     text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;
@@ -801,8 +804,9 @@
     position: absolute;
     top: 70%; 
     left: 50%; 
+    width: 600px;
     transform: translate(-50%, -50%); 
-    font-size: 60px;
+    font-size: 70px;
     font-weight: bold;
     color: red;
     text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;

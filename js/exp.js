@@ -882,7 +882,7 @@ const exp = (function() {
                 };
                 let bonusFeedbackType = (correct == 1) ? tokenArray_win.pop() : tokenArray_loss.pop();
                 let bonusFeedback = (bonusFeedbackType == 'plus') ? plusText : (bonusFeedbackType == 'minus') ? minusText : '';
-                if (gameType == 'streak' && correct == 1) {
+                if (gameType == 'streak' && correct == 1 && trial < settings.nTrials) {
                     return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '') + keyLabels;
                 } else {
                     return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback) + keyLabels;
@@ -939,7 +939,7 @@ const exp = (function() {
         this.type = jsPsychSurveyLikert;
         this.preamble = `<div style='padding-top: 50px; width: 850px; font-size:16px; color:rgb(109, 112, 114)'>
         <p>Thank you for completing the ${firstOrSecond} version of Red vs. Blue!</p>
-        <p>During the ${firstOrSecond} version of Red vs. Blue,<br>to what extent did you feel <b>immersed</b> and <b>engaged</b> in what you were doing?</p>
+        <p>During the ${firstOrSecond} version of Red vs. Blue, to what extent did you feel<br><b>immersed</b> and <b>engaged</b> in what you were doing?</p>
         <p>Report the degree to which you felt immersed and engaged by answering the following questions.</p></div>`;
         this.questions = [
             {
