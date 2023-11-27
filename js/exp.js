@@ -183,38 +183,10 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In addition to earning tokens through your performance, you can gain or lose tokens randomly.
-                        Specifically, at the end of each round, you have a 20% chance of winning 5 extra tokens, and a 20% chance of losing 5 tokens.</p>`,
-
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
                         prompt: `<p>For example, if you respond correctly, you'll see this message indicating that you earned 10 tokens.</p> 
                         <div class="play-area-inst">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                         </div>`,
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>If you see an additional "+5 Bonus" message, this means you randomly won 5 extra tokens.</p>
-                        <div class="play-area-inst">
-                            <div class="win-text-inst" style="color:green">+10 Tokens</div>
-                            <div class="plus-text-inst">+5 Bonus</div>
-                        </div>`,
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>If you see an additional "-5 Loss" message, this mean you randomly lost 5 tokens.</p>
-                        <div class="play-area-inst">
-                            <div class="win-text-inst" style="color:green">+10 Tokens</div>
-                            <div class="minus-text-inst">-5 Loss</div>,
-                        </div>`
                     },
                 ],
                 [
@@ -229,7 +201,25 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Again, if you see an additional "+5 Bonus" message, this means you randomly won 5 extra tokens.</p>
+                        prompt: `<p>In addition to earning tokens through your performance, you can gain or lose tokens randomly.
+                        Specifically, at the end of each round, you have a 20% chance of winning 5 extra tokens, and a 20% chance of losing 5 tokens.</p>`,
+
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after responding correctly:</p>
+                        <div class="play-area-inst">
+                            <div class="win-text-inst" style="color:green">+10 Tokens</div>
+                            <div class="plus-text-inst">+5 Bonus</div>
+                        </div>`,
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after responding incorrectly.</p>
                         <div class="play-area-inst">
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
@@ -239,11 +229,21 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see an additional "-5 Loss" message, this means you randomly lost 5 tokens.</p>
+                        prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after responding correctly:</p>
+                        <div class="play-area-inst">
+                            <div class="win-text-inst" style="color:green">+10 Tokens</div>
+                            <div class="minus-text-inst">-5 Loss</div>,
+                        </div>`
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>This is what you'd see if you randomly lost 5 tokens after responding incorrectly:</p>
                         <div class="play-area-inst">
                             <div class="loss-text-inst">+0 Tokens</div>
-                            <div class="minus-text-inst">+5 Bonus</div>
-                        </div>`,
+                            <div class="minus-text-inst">-5 Loss</div>,
+                        </div>`
                     },
                 ],
                 [
@@ -281,14 +281,6 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In addition to earning tokens through your performance, you'll sometimes gain (or lose) tokens randomly.
-                        Specifically, at the end of each streak, you have a 20% chance of winning 5 extra tokens, and a 20% chance of losing 5 tokens.</p>`,
-
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
                         prompt: `<p>Each time you respond correctly, you'll see the length of your current streak.</p>`
                     },
                 ],
@@ -304,9 +296,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Each time you respond incorrectly, you'll see how many tokens you earned from your streak.</p>
-                        <div class="play-area-inst">               
-                        </div>`,
+                        prompt: `<p>Each time you respond incorrectly, you'll see how many tokens you earned from your streak.</p>`
                     },
                 ],
                 [
@@ -321,7 +311,23 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see an additional "+5 Bonus" message, this means you randomly won 5 extra tokens.</p>
+                        prompt: `<p>If you respond incorrectly after failing to start a streak, you'll see this message indicating that you earned 0 tokens.</p> 
+                        <div class="play-area-inst">
+                            <div class="loss-text-inst">+0 Tokens</div>
+                        </div>`,
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>In addition to earning tokens through your performance, you'll sometimes gain (or lose) tokens randomly.
+                        Specifically, at the end of each streak, you have a 20% chance of winning 5 extra tokens, and a 20% chance of losing 5 tokens.</p>`,
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after a streak of three:</p>
                         <div class="play-area-inst">
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
@@ -332,7 +338,17 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see an additional "-5 Loss" message, this means you randomly lost 5 tokens.</p>
+                        prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after a streak of zero:</p>
+                        <div class="play-area-inst">
+                            <div class="loss-text-inst">+0 Tokens</div>
+                            <div class="plus-text-inst">+5 Bonus</div>
+                        </div>`,
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after a streak of three:</p></p>
                         <div class="play-area-inst">
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>
@@ -342,27 +358,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you respond incorrectly without having started a streak, you'll see this message indicating that you earned 0 tokens.</p> 
-                        <div class="play-area-inst">
-                            <div class="loss-text-inst">+0 Tokens</div>
-                        </div>`,
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>Again, if you see an additional "+5 Bonus" message, this means you randomly won 5 extra tokens.</p>
-                        <div class="play-area-inst">
-                            <div class="loss-text-inst">+0 Tokens</div>
-                            <div class="plus-text-inst">+5 Bonus</div>
-                        </div>`,
-
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>If you see an additional "-5 Loss" message, this means you randomly lost 5 tokens.</p>
+                        prompt: `<p>This is what you'd see if you randomly lost 5 tokens after a streak of zero:</p></p>
                         <div class="play-area-inst">
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>
@@ -786,6 +782,7 @@ const exp = (function() {
         let tokenArray_win = makeTokenArray();
         let tokenArray_loss = makeTokenArray();
         let trialTypeArray = makeTrialTypeArray(trialType1, trialType2, trialType1_prob, settings.nTrials);
+        let trialTypeArray_combined = makeTrialTypeArray("congruent", "incongruent", .5, 20);
 
         // variables for streak condition
         let streak = 0;
@@ -804,6 +801,7 @@ const exp = (function() {
             data: {phase: 'iti', round: round + 1},
             on_finish: (data) => {
                 data.trial_idx = trial;
+                console.log(trial);
             },
         };
 
@@ -813,7 +811,7 @@ const exp = (function() {
                 if (isPractice && practiceType !== "combined") {
                     stim = practiceStim_shuffled.pop()
                 } else if (practiceType == "combined") {
-                    stim = (Math.random() > .5) ? congruentStim_shuffled.pop() : incongruentStim_shuffled.pop();
+                    stim = (trialTypeArray_combined[trial - 1] == "congruent") ? congruentStim_shuffled.pop() : incongruentStim_shuffled.pop();
                 } else if (settings.difficulty[round] == 'easy') {
                     stim = (trialTypeArray[trial - 1] == "congruent") ? congruentStim_shuffled.pop() : doubleIncongruentStim_shuffled.pop();
                 } else {
@@ -858,10 +856,14 @@ const exp = (function() {
             on_finish: (data) => {
                 if (correct == 1) {
                     streak++;
+                    if (trial == settings.nTrials) {
+                        finalStreak = streak;
+                        streak = 0;
+                    };
                 } else {
                     finalStreak = streak;
                     streak = 0;
-                }
+                };
                 data.trial_idx = trial;
                 data.practice = isPractice;
             },
@@ -873,6 +875,9 @@ const exp = (function() {
                 let standardFeedback;
                 if (correct == 1) {
                     standardFeedback = winText;
+                    if (gameType == 'streak' && trial == settings.nTrials) {
+                        standardFeedback = winText.replace('10', `${10 * finalStreak}`)
+                    };
                 } else if (gameType == 'bern') {
                     standardFeedback = lossText;
                 } else if (finalStreak == 0) {
@@ -1229,7 +1234,7 @@ const exp = (function() {
     p.save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "24gJDRWxlXPo",
+        experiment_id: "SjwKhHaBz07Y",
         filename: dmPsych.filename,
         data_string: ()=>jsPsych.data.get().csv()
     };
