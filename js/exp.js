@@ -383,7 +383,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>The first version of Red vs. Blue is now complete!</p>
-                        <p>Soon, you'll continue earning tokens by playing the second verion of Red vs. Blue.</p>`
+                        <p>Soon, you'll continue earning tokens by playing the second version of Red vs. Blue.</p>`
                     },
                 ],
                 [
@@ -519,7 +519,7 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>When a tile appears at the bottom of the play area, you must indicate whether the word is "red" or "blue" (ignoring the font color).
+                    prompt: `<p>When a tile appears at the <b>bottom</b> of the play area, you must indicate whether the <b>word is "red" or "blue"</b> (ignoring the font color).
                     Press Q on your keyboard if the word is "blue," and press P if the word is "red."
                     <div class="play-area-inst">
                     </div>
@@ -615,7 +615,7 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>When a tile appears at the top of the play area, you must indicate whether the font color is red or blue (ignoring the word).
+                    prompt: `<p>When a tile appears at the <b>top</b> of the play area, you must indicate whether the <b>font color is red or blue</b> (ignoring the word).
                     Press Q if the font is blue, and press P if the font is red.
                     <div class="play-area-inst">
                     </div>
@@ -801,6 +801,7 @@ const exp = (function() {
             data: {phase: 'iti', round: round + 1},
             on_finish: (data) => {
                 data.trial_idx = trial;
+                data.practice = isPractice;
                 console.log(trial);
             },
         };
