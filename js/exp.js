@@ -802,7 +802,6 @@ const exp = (function() {
             on_finish: (data) => {
                 data.trial_idx = trial;
                 data.practice = isPractice;
-                console.log(trial);
             },
         };
 
