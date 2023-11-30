@@ -12,8 +12,6 @@ const exp = (function() {
         colors: [['purple', 'orange'], ['orange', 'purple']][Math.floor(Math.random() * 2)],
     };
 
-    console.log(settings.gameType, settings.difficulty);
-
     jsPsych.data.addProperties({
         gameType: settings.gameType,
         difficulty_1: settings.difficulty[0],
@@ -802,7 +800,7 @@ const exp = (function() {
             on_finish: (data) => {
                 data.trial_idx = trial;
                 data.practice = isPractice;
-            },
+           },
         };
 
         const response = {
