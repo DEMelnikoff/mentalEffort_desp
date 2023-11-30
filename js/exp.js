@@ -1242,7 +1242,7 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice,
+const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice,
     exp.leftOrRight_timeline_1, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);
