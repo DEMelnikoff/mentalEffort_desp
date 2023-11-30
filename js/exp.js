@@ -867,6 +867,7 @@ const exp = (function() {
                 };
                 data.trial_idx = trial;
                 data.practice = isPractice;
+                if (isPractice) { trial++ };
             },
         };
 
