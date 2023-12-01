@@ -12,8 +12,6 @@ const exp = (function() {
         colors: [['purple', 'orange'], ['orange', 'purple']][Math.floor(Math.random() * 2)],
     };
 
-    console.log(settings.gameType, settings.difficulty);
-
     jsPsych.data.addProperties({
         gameType: settings.gameType,
         difficulty_1: settings.difficulty[0],
@@ -802,8 +800,7 @@ const exp = (function() {
             on_finish: (data) => {
                 data.trial_idx = trial;
                 data.practice = isPractice;
-                console.log(trial);
-            },
+           },
         };
 
         const response = {
@@ -867,6 +864,7 @@ const exp = (function() {
                 };
                 data.trial_idx = trial;
                 data.practice = isPractice;
+                if (isPractice) { trial++ };
             },
         };
 
@@ -1244,7 +1242,7 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice,
+const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice,
     exp.leftOrRight_timeline_1, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);
