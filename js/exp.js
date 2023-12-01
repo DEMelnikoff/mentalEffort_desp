@@ -824,7 +824,7 @@ const exp = (function() {
                 if (isPractice) {
                     return 10000;
                 } else {
-                    return 700;
+                    return 1000;
                 }
             },
             data: {phase: 'response', round: round + 1},
