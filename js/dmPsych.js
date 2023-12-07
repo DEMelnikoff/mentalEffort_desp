@@ -20,7 +20,7 @@ const dmPsych = (function() {
           <p>Within one week, you'll find out if you won the $100.00 bonus.</p>
           <p><b>To receive payment, please wait to be re-directed to Prolific.</b></p>
         </div>`;
-        setTimeout(() => { location.href = `https://app.prolific.co/submissions/complete?cc=${completionCode}` }, 4000);
+        setTimeout(() => { location.href = `https://app.prolific.co/submissions/complete?cc=${completionCode}` }, 3000);
       }
     },
   });
