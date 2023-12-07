@@ -24,6 +24,9 @@ const exp = (function() {
     *
     */
 
+    console.log(settings.gameType);
+    console.log(settings.difficulty);
+
 
     function MakeAttnChk(settings, round) {
 
@@ -286,8 +289,9 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>For example, if you respond correctly three times in a row, you'll see this message:</p> 
-                        <div class="play-area-inst">               
-                            <div class="header" style="font-size: 30px; top: 10%">Current Streak: 3</div>                        
+                        <div class="play-area-inst">    
+                            <div class="streak-title-text" style="font-size:45px">Current Streak:</div> 
+                            <div class="streak-number-text" style="font-size:60px">3</div>                                               
                         </div>`,
                     },
                 ],
@@ -563,8 +567,8 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>If you respond correctly, the tile will "activate" like this:</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; border: 5px solid black; top:75%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:blue; top:75%; left:20%">red</div>
+                        <div class="tile-inst" style="background-color:green; left:20%; top:75%"></div>
+                        <div class="stroop-stim-inst" style="color:white; top:75%; left:20%">&#x2713;</div>
                     </div>
                     <div class="keycodes-inst">
                         <div class="q-key">Q<br>"blue"</div>
@@ -709,8 +713,8 @@ const exp = (function() {
         const trialType1_prob = (settings.difficulty[round] == "easy") ? .9 : .5;
 
         const congruentStim_top = [
-            ['blue', 'blue', '20%', '30%', 'q'], 
-            ['red', '#ff0000', '80%', '30%', 'p'], 
+            ['blue', 'blue', '20%', '20%', 'q'], 
+            ['red', '#ff0000', '80%', '20%', 'p'], 
         ];
 
         const congruentStim_bottom = [
@@ -719,10 +723,10 @@ const exp = (function() {
         ];
 
         const incongruentStim_top = [
-            ['blue', 'blue', '80%', '30%', 'q'], 
-            ['blue', '#ff0000', '80%', '30%', 'p'], 
-            ['red', '#ff0000', '20%', '30%', 'p'], 
-            ['red', 'blue', '20%', '30%', 'q'], 
+            ['blue', 'blue', '80%', '20%', 'q'], 
+            ['blue', '#ff0000', '80%', '20%', 'p'], 
+            ['red', '#ff0000', '20%', '20%', 'p'], 
+            ['red', 'blue', '20%', '20%', 'q'], 
         ];
 
         const incongruentStim_bottom = [
@@ -733,8 +737,8 @@ const exp = (function() {
         ];
 
         const doubleIncongruentStim_top = [
-            ['blue', '#ff0000', '20%', '30%', 'p'], 
-            ['red', 'blue', '80%', '30%', 'q'], 
+            ['blue', '#ff0000', '20%', '20%', 'p'], 
+            ['red', 'blue', '80%', '20%', 'q'], 
         ];
 
         const doubleIncongruentStim_bottom = [
@@ -763,7 +767,7 @@ const exp = (function() {
         let practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
 
         // html
-        const headerViz = (gameType == 'bern' || isPractice) ? 'hidden' : 'visible';
+        const headerViz = (gameType == 'bern' || isPractice) ? 'hidden' : 'hidden';
         const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}; top:{yPos}; left:{xPos}"></div>' + '<div class="stroop-stim" style="color:{stimColor}; top:{yPos}; left:{xPos}">{stimContent}</div>' +'</div>';
         const feedbackArea = '<div class="play-area">{token-text}{extra-text}</div>';
         const winText = '<div class="win-text">+10 Tokens</div>';
@@ -786,8 +790,11 @@ const exp = (function() {
             let arr = [];
   
             // Generate an array with 25 0s and 25 1s
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < 35; i++) {
                 arr.push("switch");
+            };
+
+            for (let i = 0; i < 15; i++) {
                 arr.push("stay");
             };
 
@@ -795,8 +802,8 @@ const exp = (function() {
 
             // Shuffle and check the array to meet the condition
             const meetsCondition = (array) => {
-                for (let i = 0; i < array.length - 2; i++) {
-                  if (array[i] === array[i + 1] && array[i] === array[i + 2]) {
+                for (let i = 0; i < array.length - 3; i++) {
+                  if (array[i] === array[i + 1] && array[i] === array[i + 2] && array[i] === array[i + 3]) {
                     return false;
                   };
                 };
@@ -807,12 +814,10 @@ const exp = (function() {
             while (!meetsCondition(arr)) {
                 arr = jsPsych.randomization.repeat(arr, 1);
             };
-
             return arr;
         };
 
         let switchArray = makeSwitchArray();
-        console.log(switchArray);
 
         // make array of trial types
         const makeTrialTypeArray = function(trialType1, trialType2, trialType1_prob, nTrials) {
@@ -872,8 +877,8 @@ const exp = (function() {
                     top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
                     if (trialTypeArray[trial - 1] == "congruent") {
                         stim = (top == 1) ? congruentStim_shuffled.top.pop() : congruentStim_shuffled.bottom.pop();
-                    } else if (trialTypeArray[trial - 1] == "incongruent") {
-                        stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
+                    } else if (trialTypeArray[trial - 1] == "doubleIncongruent") {
+                        stim = (top == 1) ? doubleIncongruentStim_shuffled.top.pop() : doubleIncongruentStim_shuffled.bottom.pop();
                     };
                 } else {
                     top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
@@ -959,7 +964,8 @@ const exp = (function() {
                 let bonusFeedbackType = (correct == 1) ? tokenArray_win.pop() : tokenArray_loss.pop();
                 let bonusFeedback = (bonusFeedbackType == 'plus') ? plusText : (bonusFeedbackType == 'minus') ? minusText : '';
                 if (gameType == 'streak' && correct == 1 && trial < settings.nTrials) {
-                    return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '') + keyLabels;
+                    return feedbackArea.replace('{token-text}', `<div class="streak-title-text">Current Streak:</div>`).replace('{extra-text}', `<div class="streak-number-text">${streak}</div>`) + keyLabels;
+                    // return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '') + keyLabels;
                 } else {
                     return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback) + keyLabels;
                 }
@@ -1305,7 +1311,7 @@ const exp = (function() {
     p.save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "Dpw6hWtm3Pwy",
+        experiment_id: "5OWDUW48D7Kw",
         filename: dmPsych.filename,
         data_string: ()=>jsPsych.data.get().csv()
     };

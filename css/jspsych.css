@@ -715,7 +715,7 @@
 .play-area {
     position: relative;
     width: 800px; 
-    height: 640px;
+    height: 550px;
     text-align: center; 
     border: 2px solid black;
 }
@@ -731,8 +731,8 @@
 .tile {
     position: absolute;
     border: null;
-    width: 200px; 
-    height: 200px;
+    width: 175px; 
+    height: 175px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -753,7 +753,7 @@
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    font-size: 60px;
+    font-size: 50px;
 }
 
 .stroop-stim-inst {
@@ -856,4 +856,25 @@
   font-weight: bold;
   color: red;
   text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000;
+}
+
+.streak-title-text {
+    position: absolute;
+    top: 50%; 
+    left: 50%; 
+    width: 600px;
+    transform: translate(-50%, -50%); 
+    font-size: 60px;
+    color: black;
+}
+
+.streak-number-text {
+    position: absolute;
+    top: 70%; 
+    left: 50%; 
+    width: 600px;
+    transform: translate(-50%, -50%); 
+    font-size: 80px;
+    font-weight: bold;
+    color: black;
 }
