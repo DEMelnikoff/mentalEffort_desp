@@ -703,42 +703,63 @@ const exp = (function() {
 
         let correct, stim;
         let trial = 1;
+        let top = 1;
         const trialType1 = (settings.difficulty[round] == "easy") ? "congruent" : "incongruent";
         const trialType2 = "doubleIncongruent";
         const trialType1_prob = (settings.difficulty[round] == "easy") ? .9 : .5;
 
-        const congruentStim = [
+        const congruentStim_top = [
             ['blue', 'blue', '20%', '30%', 'q'], 
-            ['blue', 'blue', '20%', '80%', 'q'], 
             ['red', '#ff0000', '80%', '30%', 'p'], 
+        ];
+
+        const congruentStim_bottom = [
+            ['blue', 'blue', '20%', '80%', 'q'], 
             ['red', '#ff0000', '80%', '80%', 'p'],
         ];
-        const incongruentStim = [
+
+        const incongruentStim_top = [
             ['blue', 'blue', '80%', '30%', 'q'], 
-            ['blue', 'blue', '80%', '80%', 'q'], 
             ['blue', '#ff0000', '80%', '30%', 'p'], 
-            ['blue', '#ff0000', '20%', '80%', 'q'],
             ['red', '#ff0000', '20%', '30%', 'p'], 
-            ['red', '#ff0000', '20%', '80%', 'p'],
             ['red', 'blue', '20%', '30%', 'q'], 
+        ];
+
+        const incongruentStim_bottom = [
+            ['blue', 'blue', '80%', '80%', 'q'], 
+            ['blue', '#ff0000', '20%', '80%', 'q'],
+            ['red', '#ff0000', '20%', '80%', 'p'],
             ['red', 'blue', '80%', '80%', 'p'],
         ];
 
-        const doubleIncongruentStim = [
+        const doubleIncongruentStim_top = [
             ['blue', '#ff0000', '20%', '30%', 'p'], 
-            ['blue', '#ff0000', '80%', '80%', 'q'],
             ['red', 'blue', '80%', '30%', 'q'], 
+        ];
+
+        const doubleIncongruentStim_bottom = [
+            ['blue', '#ff0000', '80%', '80%', 'q'],
             ['red', 'blue', '20%', '80%', 'p'],
         ];
 
-        let practiceStim = [congruentStim[0], congruentStim[2], incongruentStim[0], incongruentStim[2], incongruentStim[4], incongruentStim[6]];
-        if (practiceType == "word") {
-            practiceStim = [congruentStim[1], congruentStim[3], incongruentStim[1], incongruentStim[3], incongruentStim[5], incongruentStim[7]];
+        let practiceStim = [...congruentStim_top, ...incongruentStim_top];
+        if (practiceType == "word") { practiceStim = [...congruentStim_bottom, ...incongruentStim_bottom] };
+
+        let congruentStim_shuffled = {
+            top: jsPsych.randomization.repeat(congruentStim_top, 1),
+            bottom: jsPsych.randomization.repeat(congruentStim_bottom, 1)
         };
 
-        let congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
-        let incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
-        let doubleIncongruentStim_shuffled = jsPsych.randomization.repeat(doubleIncongruentStim, 1);
+        let incongruentStim_shuffled = {
+            top: jsPsych.randomization.repeat(incongruentStim_top, 1),
+            bottom: jsPsych.randomization.repeat(incongruentStim_bottom, 1),
+        };
+
+        let doubleIncongruentStim_shuffled = {
+            top: jsPsych.randomization.repeat(doubleIncongruentStim_top, 1),
+            bottom: jsPsych.randomization.repeat(doubleIncongruentStim_bottom, 1),
+        }
+
         let practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
 
         // html
@@ -760,6 +781,38 @@ const exp = (function() {
         const makeTokenArray = function() {
           return jsPsych.randomization.repeat(['plus', 'minus', 'normal', 'normal', 'normal'], 1);
         };
+
+        const makeSwitchArray = function() {
+            let arr = [];
+  
+            // Generate an array with 25 0s and 25 1s
+            for (let i = 0; i < 25; i++) {
+                arr.push("switch");
+                arr.push("stay");
+            };
+
+            arr = jsPsych.randomization.repeat(arr, 1);
+
+            // Shuffle and check the array to meet the condition
+            const meetsCondition = (array) => {
+                for (let i = 0; i < array.length - 2; i++) {
+                  if (array[i] === array[i + 1] && array[i] === array[i + 2]) {
+                    return false;
+                  };
+                };
+                return true;
+            };
+
+            // Keep shuffling until the condition is met
+            while (!meetsCondition(arr)) {
+                arr = jsPsych.randomization.repeat(arr, 1);
+            };
+
+            return arr;
+        };
+
+        let switchArray = makeSwitchArray();
+        console.log(switchArray);
 
         // make array of trial types
         const makeTrialTypeArray = function(trialType1, trialType2, trialType1_prob, nTrials) {
@@ -809,11 +862,26 @@ const exp = (function() {
                 if (isPractice && practiceType !== "combined") {
                     stim = practiceStim_shuffled.pop()
                 } else if (practiceType == "combined") {
-                    stim = (trialTypeArray_combined[trial - 1] == "congruent") ? congruentStim_shuffled.pop() : incongruentStim_shuffled.pop();
+                    top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
+                    if (trialTypeArray_combined[trial - 1] == "congruent") {
+                        stim = (top == 1) ? congruentStim_shuffled.top.pop() : congruentStim_shuffled.bottom.pop();
+                    } else if (trialTypeArray_combined[trial - 1] == "incongruent") {
+                        stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
+                    };
                 } else if (settings.difficulty[round] == 'easy') {
-                    stim = (trialTypeArray[trial - 1] == "congruent") ? congruentStim_shuffled.pop() : doubleIncongruentStim_shuffled.pop();
+                    top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
+                    if (trialTypeArray[trial - 1] == "congruent") {
+                        stim = (top == 1) ? congruentStim_shuffled.top.pop() : congruentStim_shuffled.bottom.pop();
+                    } else if (trialTypeArray[trial - 1] == "incongruent") {
+                        stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
+                    };
                 } else {
-                    stim = (trialTypeArray[trial - 1] == "incongruent") ? incongruentStim_shuffled.pop() : doubleIncongruentStim_shuffled.pop();
+                    top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
+                    if (trialTypeArray[trial - 1] == "doubleIncongruent") {
+                        stim = (top == 1) ? doubleIncongruentStim_shuffled.top.pop() : doubleIncongruentStim_shuffled.bottom.pop();
+                    } else if (trialTypeArray[trial - 1] == "incongruent") {
+                        stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
+                    };
                 };
                 return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]) + keyLabels;
             },
@@ -821,7 +889,7 @@ const exp = (function() {
                 if (isPractice) {
                     return 10000;
                 } else {
-                    return 1000;
+                    return 850;
                 }
             },
             data: {phase: 'response', round: round + 1},
@@ -830,10 +898,13 @@ const exp = (function() {
                 data.trial_idx = trial;
                 data.practice = isPractice;
                 data.correct = correct;
-                if (congruentStim_shuffled.length == 0 || incongruentStim_shuffled.length == 0 || doubleIncongruentStim_shuffled.length == 0 || practiceStim_shuffled.length == 0) {
-                    congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
-                    incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
-                    doubleIncongruentStim_shuffled = jsPsych.randomization.repeat(doubleIncongruentStim, 1);
+                if (congruentStim_shuffled.top.length == 0 || congruentStim_shuffled.bottom.length == 0 || incongruentStim_shuffled.top.length == 0 || incongruentStim_shuffled.bottom.length == 0 || doubleIncongruentStim_shuffled.top.length == 0 || doubleIncongruentStim_shuffled.bottom.length == 0 || practiceStim_shuffled.length == 0) {
+                    congruentStim_shuffled.top = jsPsych.randomization.repeat(congruentStim_top, 1);
+                    congruentStim_shuffled.bottom = jsPsych.randomization.repeat(congruentStim_bottom, 1);
+                    incongruentStim_shuffled.top = jsPsych.randomization.repeat(incongruentStim_top, 1);
+                    incongruentStim_shuffled.bottom = jsPsych.randomization.repeat(incongruentStim_bottom, 1);
+                    doubleIncongruentStim_shuffled.top = jsPsych.randomization.repeat(doubleIncongruentStim_top, 1);
+                    doubleIncongruentStim_shuffled.bottom = jsPsych.randomization.repeat(doubleIncongruentStim_bottom, 1);
                     practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
                 };
             },
@@ -842,11 +913,12 @@ const exp = (function() {
         const outcome = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                let tileColor = (correct == 1) ? '#b3b3b3' : 'white';
-                let stimColor = (correct == 1) ? stim[1] : 'white';
-                let borderStyle = (correct == 1) ? '5px solid black' : null;
+                let tileColor = (correct == 1) ? 'green' : 'white';
+                let stimColor = 'white';
+                let stimContent = "&#x2713;"
+                let borderStyle = (correct == 1) ? null : null;
                 let outcome_html;
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stim[0]) + keyLabels;
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stimContent) + keyLabels;
             },
             choices: "NO_KEYS",
             trial_duration: 1000,
