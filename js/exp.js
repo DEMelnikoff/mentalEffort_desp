@@ -422,7 +422,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In addition to having different names and colors, ${settings.gameName_2} is <b>${settings.harderOrEasier}</b> than ${settings.gameName_1}.</p>
+                        prompt: `<p>In ${settings.gameName_2}, most players respond correctly at a higher rate compared to ${settings.gameName_1}.</p>
                         <p>Specifically, in ${settings.gameName_2}, most players respond corrrectly <b>${settings.pctCorrect[1]}</b> of the time.</p>`
                     },
                 ],
@@ -455,6 +455,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>You're now ready to play ${[settings.gameName_1, settings.gameName_2][round - 1]}.</p>
+                        <p><b>Remember, the more tokens you earn, the better your chances of winning $100.00 bonus!</b></p>
                         <p>To begin, continue to the next screen.</p>`
                     },
                 ],
