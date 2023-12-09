@@ -648,7 +648,7 @@
 .play-area-inst {
     position: relative;
     width: 500px; 
-    height: 400px;
+    height: 375px;
     text-align: center; 
     border: 2px solid black;
     left: 50%;
@@ -659,7 +659,7 @@
 .keycodes-inst {
     position: relative;
     width: 500px; 
-    height: 50px;
+    height: 100px;
     text-align: center; 
     left: 50%;
     transform: translate(-50%, 0%);
@@ -701,6 +701,17 @@
     background: blue;
 }
 
+.purple-rec {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 20px; 
+    width: 50px; 
+    background: purple;
+}
+
 .red-rec {
     display: block;
     margin-left: auto;
@@ -710,6 +721,17 @@
     height: 20px; 
     width: 50px; 
     background: #ff0000;
+}
+
+.orange-rec {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 20px; 
+    width: 50px; 
+    background: #F37413;
 }
 
 .play-area {
@@ -753,7 +775,7 @@
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    font-size: 50px;
+    font-size: 40px;
 }
 
 .stroop-stim-inst {
@@ -761,7 +783,7 @@
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .win-text {

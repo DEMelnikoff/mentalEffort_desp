@@ -5,11 +5,21 @@ const exp = (function() {
 
     let p = {};
 
+    const colorDraw = Math.floor(Math.random() * 2);
+    const difficultyDraw = Math.floor(Math.random() * 2)
+
     let settings = {
         gameType: ['streak', 'bern'][Math.floor(Math.random() * 2)],
-        difficulty: [['easy', 'hard'], ['hard', 'easy']][Math.floor(Math.random() * 2)],
+        difficulty: [['easy', 'hard'], ['hard', 'easy']][difficultyDraw],
+        harderOrEasier: ['harder', 'easier'][difficultyDraw],
+        pctCorrect: [['85%', '55%'], ['55%', '85%']][difficultyDraw],
         nTrials: 50,
-        colors: [['purple', 'orange'], ['orange', 'purple']][Math.floor(Math.random() * 2)],
+        colorNames_1: [['blue', 'red'], ['purple', 'orange']][colorDraw],
+        colorNames_2: [['blue', 'red'], ['purple', 'orange']][1 - colorDraw],
+        colorHex_1: [['blue', '#ff0000'], ['purple', '#F37413']][colorDraw],
+        colorHex_2: [['blue', '#ff0000'], ['purple', '#F37413']][1 - colorDraw],
+        gameName_1: ["Blue vs. Red", "Purple vs. Orange"][colorDraw],
+        gameName_2: ["Blue vs. Red", "Purple vs. Orange"][1 - colorDraw],
     };
 
     jsPsych.data.addProperties({
@@ -24,18 +34,17 @@ const exp = (function() {
     *
     */
 
-    console.log(settings.gameType);
-    console.log(settings.difficulty);
+    console.log(settings.gameType, settings.difficulty, settings.colorNames_1);
 
 
     function MakeAttnChk(settings, round) {
 
-        let firstOrSecond = (round == 1) ? "first" : "second";
-        let moreOrLess = (settings.difficulty[1] == "hard") ? "more" : "less";
+        let incorrectA = (settings.gameType == "streak") ? `30 tokens` : `10 tokens`;
+        let pctA_1 = (settings.difficulty[0] == "hard") ? `55% of the time.` : `85% of the time.`;
+        let pctA_2 = (settings.difficulty[1] == "hard") ? `55% of the time.` : `85% of the time.`;
 
-        let correctAnswers_1 = [`10 tokens`, `0 tokens`, `20%`, `20%`, `If I respond after the tile disappears, my response will be incorrect.`];
-        if (settings.gameType == "streak") { correctAnswers_1[0] = `30 tokens` };
-        let correctAnswers_2 = (settings.difficulty[1] == "hard") ? [`The second version of Red vs. Blue is more difficult than the first version.`] : [`The second version of Red vs. Blue is less difficult than the first version.`];
+        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `If I respond after the tile disappears, my response will be incorrect.`, pctA_1];
+        let correctAnswers_2 = [pctA_2];
 
         let attnChk;
 
@@ -47,12 +56,12 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond correctly to a tile, you will earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond correctly to a tile, you'll earn...</div>", 
                         name: `attnChk1`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond incorrectly to a tile, you will earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond incorrectly to a tile, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
@@ -70,6 +79,11 @@ const exp = (function() {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
                         options: [`I can take as long as I want to respond to each tile.`, `If I respond after the tile disappears, my response will be incorrect.`],
+                    },
+                    {
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players respond correctly?`, 
+                        name: `attnChk6`, 
+                        options: [`0% of the time.`, `55% of the time.`, `85% of the time.`, `100% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -110,6 +124,11 @@ const exp = (function() {
                         name: `attnChk5`, 
                         options: [`I can take as long as I want to respond to each tile.`, `If I respond after the tile disappears, my response will be incorrect.`],
                     },
+                    {
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players respond correctly?`, 
+                        name: `attnChk6`, 
+                        options: [`0% of the time.`, `55% of the time.`, `85% of the time.`, `100% of the time.`],
+                    },
                 ],
                 scale_width: 500,
                 on_finish: (data) => {
@@ -121,13 +140,13 @@ const exp = (function() {
             attnChk = {
                 type: jsPsychSurveyMultiChoice,
                 preamble: `<div class='parent' style='text-align: left; color: rgb(109, 112, 114)'>
-                    <p><strong>Please answer the following questions.</strong></p>
+                    <p><strong>Please answer the following question.</strong></p>
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>Which of the following statements is true?</div>", 
-                        name: `attnChk4`, 
-                        options: [`The second version of Red vs. Blue is more difficult than the first version.`, `The second version of Red vs. Blue is less difficult than the first version.`],
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_2}, how often do most players respond correctly?`, 
+                        name: `attnChk7`, 
+                        options: [`0% of the time.`, `55% of the time.`, `85% of the time.`, `100% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -167,8 +186,8 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>Practice is now complete.</p>
-                        <p>Next, you'll play two different versions of Red vs. Blue. During both versions, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
-                        <p>Specifically, during both versions of Red vs. Blue, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
+                        <p>Next, you'll play ${settings.gameName_1}. During ${settings.gameName_1}, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
+                        <p>Specifically, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
                         <p>Continue to learn how to earn tokens!</p>`
                     },
                 ],
@@ -176,7 +195,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<div class='parent'>
-                        <p>In Red vs. Blue, players earn 10 tokens for every correct response.</p>
+                        <p>In ${settings.gameName_1}, players earn 10 tokens for every correct response.</p>
                         <p>Players earn 0 tokens for every incorrect response.</p>
                         </div>`,
                     },
@@ -250,8 +269,14 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p><b>WARNING: During Red vs. Blue, you must respond to each tile as fast as possible!</b></p>
+                        prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
                         <p>Each tile will disappear very quickly. If you fail to respond correctly before a tile disappears, your response will be considered incorrect.</p>`
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>In ${settings.gameName_1}, most players respond correctly <b>${settings.pctCorrect[0]}</b> of the time.`
                     },
                 ],
             ],
@@ -265,15 +290,15 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>Practice is now complete.</p>
-                        <p>Next, you'll play two different versions of Red vs. Blue. During both versions, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
-                        <p>Specifically, during both versions of Red vs. Blue, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
+                        <p>Next, you'll play ${settings.gameName_1}. During ${settings.gameName_1}, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
+                        <p>Specifically, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
                         <p>Continue to learn how to earn tokens!</p>`
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In Red vs. Blue, players earn tokens for streaks of consecutive successes.</p>
+                        prompt: `<p>In ${settings.gameName_1}, players earn tokens for streaks of consecutive successes.</p>
                         <p>Specifically, players earn 10 tokens for every consecutive correct response.</p>
                         <p>For example, a streak of 2 consecutive successes is worth 20 cents, 
                         a streak of 3 consecutive successes is worth 30 cents, and so on.</p>`,
@@ -370,8 +395,14 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p><b>WARNING: During Red vs. Blue, you must respond to each tile as fast as possible!</b></p>
+                        prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
                         <p>Each tile will disappear very quickly. If you fail to respond correctly before a tile disappears, your response will be considered incorrect.</p>`
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>In ${settings.gameName_1}, most players respond correctly <b>${settings.pctCorrect[0]}</b> of the time.`
                     },
                 ],
             ],
@@ -384,15 +415,15 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>The first version of Red vs. Blue is now complete!</p>
-                        <p>Soon, you'll continue earning tokens by playing the second version of Red vs. Blue.</p>`
+                        prompt: `<p>Practice is now complete.</p>
+                        <p>Continue to learn more about ${settings.gameName_2}</p>`
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>The second version of Red vs. Blue is identical to the first version with one exception: it is ${moreOrLess} difficult.</p>
-                        <p>Specifically, most players make ${moreOrLess} errors in the second version compared to the first version.</p>`
+                        prompt: `<p>In addition to having different names and colors, ${settings.gameName_2} is <b>${settings.harderOrEasier}</b> than ${settings.gameName_1}.</p>
+                        <p>Specifically, in ${settings.gameName_2}, most players respond corrrectly <b>${settings.pctCorrect[1]}</b> of the time.</p>`
                     },
                 ],
             ],
@@ -423,7 +454,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>You're now ready to play the ${firstOrSecond} version of Red vs. Blue.</p>
+                        prompt: `<p>You're now ready to play ${[settings.gameName_1, settings.gameName_2][round - 1]}.</p>
                         <p>To begin, continue to the next screen.</p>`
                     },
                 ],
@@ -451,14 +482,14 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p><strong>What makes some activities more immersive and engaging than others?</strong></p>
                     <p>We're interested in why people feel effortlessly engaged in some activities (such as engrossing video games), but struggle to focus on other activities.</p>
-                    <p>To help us, you'll play two different versions of a game called Red vs. Blue. After each game, you'll report how immersed and engaged you felt.</p>
-                    <p>To learn about and play Red vs. Blue, continue to the next screen.</p></p>`
+                    <p>To help us, you'll play two different games. After each game, you'll report how immersed and engaged you felt.</p>
+                    <p>To learn about and play the first game, continue to the next screen.</p></p>`
                 },
             ],
             [
                 {
                     type: 'html',
-                    prompt: `<p>Red vs. Blue takes place in a play area like this one:</p>
+                    prompt: `<p>The first came is called ${settings.gameName_1}. It takes place in a play area like this one:</p>
                     <div class="play-area-inst">
                     </div>`
                 },
@@ -468,7 +499,7 @@ const exp = (function() {
                 {
                     type: 'html',
                     prompt: `<p>Throughout the game, tiles will appear in the play area. On each tile, 
-                    you'll see the word "red" or "blue" written in either red or blue font. Proceed to see some examples.</p>
+                    you'll see the word "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}" written in either ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]} font. Proceed to see some examples.</p>
                     <div class="play-area-inst">
                     </div>`
                 },
@@ -477,10 +508,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "red" in red font.</p>
+                    prompt: `<p>This tile displays the word "${settings.colorNames_1[0]}" in ${settings.colorNames_1[0]} font.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:#ff0000; top:25%; left:20%">red</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:25%; left:20%">${settings.colorNames_1[0]}</div>
                     </div>`
                 },
             ],
@@ -488,10 +519,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "red" in blue font.</p>
+                    prompt: `<p>This tile displays the word "${settings.colorNames_1[0]}" in ${settings.colorNames_1[1]} font.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:blue; top:25%; left:80%">red</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:25%; left:80%">${settings.colorNames_1[0]}</div>
                     </div>`
                 },
             ],
@@ -499,10 +530,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "blue" in blue font.</p>
+                    prompt: `<p>This tile displays the word "${settings.colorNames_1[1]}" in ${settings.colorNames_1[1]} font.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:blue; top:75%; left:20%">blue</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:75%; left:20%">${settings.colorNames_1[1]}</div>
                     </div>`
                 },
             ],
@@ -510,10 +541,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "blue" in red font.</p>
+                    prompt: `<p>This tile displays the word "${settings.colorNames_1[1]}" in ${settings.colorNames_1[0]} font.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:#ff0000; top:75%; left:80%">blue</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:75%; left:80%">${settings.colorNames_1[1]}</div>
                     </div>`
                 },
             ],
@@ -521,13 +552,13 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>When a tile appears at the <b>bottom</b> of the play area, you must indicate whether the <b>word is "red" or "blue"</b> (ignoring the font color).
-                    Press Q on your keyboard if the word is "blue," and press P if the word is "red."
+                    prompt: `<p>When a tile appears at the <b>bottom</b> of the play area, you must indicate whether the <b>word is "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}"</b> (ignoring the font color).
+                    Press Q on your keyboard if the word is "${settings.colorNames_1[0]}," and press P if the word is "${settings.colorNames_1[1]}."
                     <div class="play-area-inst">
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"blue"</div>
-                        <div class="p-key">P<br>"red"</div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
@@ -537,12 +568,12 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>For example, you should respond to this tile by pressing Q.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:#ff0000; top:75%; left:80%">blue</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:75%; left:80%">${settings.colorNames_1[0]}</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"blue"</div>
-                        <div class="p-key">P<br>"red"</div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
@@ -552,12 +583,12 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>You should respond to this tile by pressing P.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:75%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:blue; top:75%; left:20%">red</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:75%; left:20%">${settings.colorNames_1[1]}</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"blue"</div>
-                        <div class="p-key">P<br>"red"</div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
@@ -571,8 +602,8 @@ const exp = (function() {
                         <div class="stroop-stim-inst" style="color:white; top:75%; left:20%">&#x2713;</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"blue"</div>
-                        <div class="p-key">P<br>"red"</div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
@@ -584,8 +615,8 @@ const exp = (function() {
                     <div class="play-area-inst">
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"blue"</div>
-                        <div class="p-key">P<br>"red"</div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
@@ -594,7 +625,7 @@ const exp = (function() {
                 {
                     type: 'html',
                     prompt: `<p>To practice identifying the word on each tile, you'll complete a few practice rounds. During the practice rounds, tiles will always appear at the bottom of the play area, so your goal is always to
-                    identify whether the word is "red" or "blue."</p>
+                    identify whether the word is "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}."</p>
                     <p>Continue to start practicing.</p>`,
                 }
             ],
@@ -617,13 +648,13 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>When a tile appears at the <b>top</b> of the play area, you must indicate whether the <b>font color is red or blue</b> (ignoring the word).
-                    Press Q if the font is blue, and press P if the font is red.
+                    prompt: `<p>When a tile appears at the <b>top</b> of the play area, you must indicate whether the <b>font color is ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]}</b> (ignoring the word).
+                    Press Q if the font is ${settings.colorNames_1[0]}, and press P if the font is ${settings.colorNames_1[1]}.
                     <div class="play-area-inst">
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"> Q<br><div class="blue-rec"></div> </div>
-                        <div class="p-key"> P<br><div class="red-rec"></div> </div>
+                        <div class="q-key"> Q<br><div class="${settings.colorNames_1[0]}-rec"></div> </div>
+                        <div class="p-key"> P<br><div class="${settings.colorNames_1[1]}-rec"></div> </div>
                     </div>`
                 },
             ],
@@ -633,12 +664,12 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>For example, you should respond to this tile by pressing P.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:#ff0000; top:25%; left:80%">blue</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:25%; left:80%">${settings.colorNames_1[0]}</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"> Q <div class="blue-rec"></div> </div>
-                        <div class="p-key"> P <div class="red-rec"></div> </div>
+                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div> </div>
+                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div> </div>
                     </div>`
                 },
             ],
@@ -648,12 +679,12 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>You should respond to this tile by pressing Q.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#b3b3b3; top:25%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:blue; top:25%; left:20%">red</div>
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:25%; left:20%">${settings.colorNames_1[1]}</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"> Q <div class="blue-rec"></div> </div>
-                        <div class="p-key"> P <div class="red-rec"></div> </div>
+                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div> </div>
+                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div> </div>
                     </div>`
                 },
             ],
@@ -662,7 +693,7 @@ const exp = (function() {
                 {
                     type: 'html',
                     prompt: `<p>To practice identifying the font color on each tile, you'll complete a few practice rounds. During the practice rounds, tiles will always appear at the top of the play area, so your goal is always to
-                    identify whether the font is red or blue.</p>
+                    identify whether the font is ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]}.</p>
                     <p>Continue to start practicing.</p>`,
                 }
             ],
@@ -688,6 +719,116 @@ const exp = (function() {
         button_label_finish: 'Next'
     };
 
+    p.intro_round2 = {
+        type: jsPsychSurvey,
+        pages: [
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>${settings.gameName_1} is now complete!</p>
+                    <p>Soon, you'll continue earning tokens by playing a second game called ${settings.gameName_2}.</p>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>${settings.gameName_2} is identical to ${settings.gameName_1} with two exceptions.</p>
+                    <p>First, the words and colors are different: In ${settings.gameName_2}, you'll see the words "${settings.colorNames_2[0]}" and "${settings.colorNames_2[1]}" in ${settings.colorNames_2[0]} and ${settings.colorNames_2[1]} font.</p>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>When a tile appears at the <b>bottom</b> of the play area, you must indicate whether the <b>word is "${settings.colorNames_2[0]}" or "${settings.colorNames_2[1]}"</b> (ignoring the font color).
+                    Press Q on your keyboard if the word is "${settings.colorNames_2[0]}," and press P if the word is "${settings.colorNames_2[1]}."
+                    <div class="play-area-inst">
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_2[0]}-rec"></div> "${settings.colorNames_2[0]}" </div> 
+                        <div class="p-key"> P <div class="${settings.colorNames_2[1]}-rec"></div> "${settings.colorNames_2[1]}" </div>
+                    </div>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>For example, you should respond to this tile by pressing Q.</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_2[1]}; top:75%; left:80%">${settings.colorNames_2[0]}</div>
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_2[0]}-rec"></div> "${settings.colorNames_2[0]}" </div> 
+                        <div class="p-key"> P <div class="${settings.colorNames_2[1]}-rec"></div> "${settings.colorNames_2[1]}" </div>
+                    </div>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>You should respond to this tile by pressing P.</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_2[0]}; top:75%; left:20%">${settings.colorNames_2[1]}</div>
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_2[0]}-rec"></div> "${settings.colorNames_2[0]}" </div> 
+                        <div class="p-key"> P <div class="${settings.colorNames_2[1]}-rec"></div> "${settings.colorNames_2[1]}" </div>
+                    </div>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>When a tile appears at the <b>top</b> of the play area, you must indicate whether the <b>font color is ${settings.colorNames_2[0]} or ${settings.colorNames_2[1]}</b> (ignoring the word).
+                    Press Q if the font is ${settings.colorNames_2[0]}, and press P if the font is ${settings.colorNames_2[1]}.
+                    <div class="play-area-inst">
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_2[0]}-rec"></div> "${settings.colorNames_2[0]}" </div> 
+                        <div class="p-key"> P <div class="${settings.colorNames_2[1]}-rec"></div> "${settings.colorNames_2[1]}" </div>
+                    </div>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>For example, you should respond to this tile by pressing P.</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:80%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_2[1]}; top:25%; left:80%">${settings.colorNames_2[0]}</div>
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_2[0]}-rec"></div> "${settings.colorNames_2[0]}" </div> 
+                        <div class="p-key"> P <div class="${settings.colorNames_2[1]}-rec"></div> "${settings.colorNames_2[1]}" </div>
+                    </div>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>You should respond to this tile by pressing Q.</p>
+                    <div class="play-area-inst">
+                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:20%"></div>
+                        <div class="stroop-stim-inst" style="color:${settings.colorHex_2[0]}; top:25%; left:20%">${settings.colorNames_2[1]}</div>
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_2[0]}-rec"></div> "${settings.colorNames_2[0]}" </div> 
+                        <div class="p-key"> P <div class="${settings.colorNames_2[1]}-rec"></div> "${settings.colorNames_2[1]}" </div>
+                    </div>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>Next, you'll practice ${settings.gameName_2}. Continue when you're ready to begin practicing.</p>`
+                },
+            ],
+
+        ],
+        button_label_finish: 'Next',        
+    }
+
     const attnChk1 = new MakeAttnChk(settings, 1);
 
     const attnChk2 = new MakeAttnChk(settings, 2);
@@ -703,7 +844,7 @@ const exp = (function() {
     // temporary variables for flanker task
 
 
-    const MakeTimeline = function(round, gameType, isPractice, practiceType) {
+    const MakeTimeline = function(round, gameType, isPractice, practiceType, colorNames, colorHex) {
 
         let correct, stim;
         let trial = 1;
@@ -713,37 +854,37 @@ const exp = (function() {
         const trialType1_prob = (settings.difficulty[round] == "easy") ? .9 : .5;
 
         const congruentStim_top = [
-            ['blue', 'blue', '20%', '20%', 'q'], 
-            ['red', '#ff0000', '80%', '20%', 'p'], 
+            [colorNames[0], colorHex[0], '20%', '20%', 'q'], 
+            [colorNames[1], colorHex[1], '80%', '20%', 'p'], 
         ];
 
         const congruentStim_bottom = [
-            ['blue', 'blue', '20%', '80%', 'q'], 
-            ['red', '#ff0000', '80%', '80%', 'p'],
+            [colorNames[0], colorHex[0], '20%', '80%', 'q'], 
+            [colorNames[1], colorHex[1], '80%', '80%', 'p'],
         ];
 
         const incongruentStim_top = [
-            ['blue', 'blue', '80%', '20%', 'q'], 
-            ['blue', '#ff0000', '80%', '20%', 'p'], 
-            ['red', '#ff0000', '20%', '20%', 'p'], 
-            ['red', 'blue', '20%', '20%', 'q'], 
+            [colorNames[0], colorHex[0], '80%', '20%', 'q'], 
+            [colorNames[0], colorHex[1], '80%', '20%', 'p'], 
+            [colorNames[1], colorHex[1], '20%', '20%', 'p'], 
+            [colorNames[1], colorHex[0], '20%', '20%', 'q'], 
         ];
 
         const incongruentStim_bottom = [
-            ['blue', 'blue', '80%', '80%', 'q'], 
-            ['blue', '#ff0000', '20%', '80%', 'q'],
-            ['red', '#ff0000', '20%', '80%', 'p'],
-            ['red', 'blue', '80%', '80%', 'p'],
+            [colorNames[0], colorHex[0], '80%', '80%', 'q'], 
+            [colorNames[0], colorHex[1], '20%', '80%', 'q'],
+            [colorNames[1], colorHex[1], '20%', '80%', 'p'],
+            [colorNames[1], colorHex[0], '80%', '80%', 'p'],
         ];
 
         const doubleIncongruentStim_top = [
-            ['blue', '#ff0000', '20%', '20%', 'p'], 
-            ['red', 'blue', '80%', '20%', 'q'], 
+            [colorNames[0], colorHex[1], '20%', '20%', 'p'], 
+            [colorNames[1], colorHex[0], '80%', '20%', 'q'], 
         ];
 
         const doubleIncongruentStim_bottom = [
-            ['blue', '#ff0000', '80%', '80%', 'q'],
-            ['red', 'blue', '20%', '80%', 'p'],
+            [colorNames[0], colorHex[1], '80%', '80%', 'q'],
+            [colorNames[1], colorHex[0], '20%', '80%', 'p'],
         ];
 
         let practiceStim = [...congruentStim_top, ...incongruentStim_top];
@@ -774,11 +915,11 @@ const exp = (function() {
         const lossText = '<div class="loss-text">+0 Tokens</div>';
         const plusText = '<div class="plus-text">+5 Bonus</div>';
         const minusText = '<div class="minus-text">-5 Loss</div>';
-        let keyLabels = `<div class="keycodes"> <div class="q-key"> Q <div class="blue-rec"></div> "blue" </div> <div class="p-key"> P <div class="red-rec"></div> "red" </div> </div>`;
+        let keyLabels = `<div class="keycodes"> <div class="q-key"> Q <div class="${colorNames[0]}-rec"></div> "${colorNames[0]}" </div> <div class="p-key"> P <div class="${colorNames[1]}-rec"></div> "${colorNames[1]}" </div> </div>`;
         if (practiceType == "word") {
-            keyLabels = `<div class="keycodes"> <div class="q-key">Q<br>"blue"</div> <div class="p-key">P<br>"red"</div> </div>`;
+            keyLabels = `<div class="keycodes"> <div class="q-key">Q<br>"${colorNames[0]}"</div> <div class="p-key">P<br>"${colorNames[1]}"</div> </div>`;
         } else if (practiceType == "color") {
-            keyLabels = `<div class="keycodes"> <div class="q-key"> Q <div class="blue-rec"></div> </div> <div class="p-key"> P <div class="red-rec"></div> </div> </div>`;
+            keyLabels = `<div class="keycodes"> <div class="q-key"> Q <div class="${colorNames[0]}-rec"></div> </div> <div class="p-key"> P <div class="${colorNames[1]}-rec"></div> </div> </div>`;
         };
 
         // make array of token outcomes 
@@ -888,7 +1029,7 @@ const exp = (function() {
                         stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
                     };
                 };
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#b3b3b3').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]) + keyLabels;
+                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#D9D9D9').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]) + keyLabels;
             },
             trial_duration: () => {
                 if (isPractice) {
@@ -997,12 +1138,13 @@ const exp = (function() {
 
     };
 
-    p.wordPractice = new MakeTimeline(0, settings.gameType, true, "word");
-    p.colorPractice = new MakeTimeline(0, settings.gameType, true, "color");
-    p.combinedPractice = new MakeTimeline(0, settings.gameType, true, "combined");
+    p.wordPractice = new MakeTimeline(0, settings.gameType, true, "word", settings.colorNames_1, settings.colorHex_1);
+    p.colorPractice = new MakeTimeline(0, settings.gameType, true, "color", settings.colorNames_1, settings.colorHex_1);
+    p.combinedPractice = new MakeTimeline(0, settings.gameType, true, "combined", settings.colorNames_1, settings.colorHex_1);
+    p.combinedPractice2 = new MakeTimeline(0, settings.gameType, true, "combined", settings.colorNames_2, settings.colorHex_2);
 
-    const flanker_timeline_1 = new MakeTimeline(0, settings.gameType, false, null);
-    const flanker_timeline_2 = new MakeTimeline(1, settings.gameType, false, null);
+    const flanker_timeline_1 = new MakeTimeline(0, settings.gameType, false, null, settings.colorNames_1, settings.colorHex_1);
+    const flanker_timeline_2 = new MakeTimeline(1, settings.gameType, false, null, settings.colorNames_2, settings.colorHex_2);
 
 
    /*
@@ -1017,33 +1159,33 @@ const exp = (function() {
 
     // constructor functions
     function MakeFlowQs(round) {
-        const firstOrSecond = (round == 1) ? "first" : "second";
+        const gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
         this.type = jsPsychSurveyLikert;
         this.preamble = `<div style='padding-top: 50px; width: 850px; font-size:16px; color:rgb(109, 112, 114)'>
-        <p>Thank you for completing the ${firstOrSecond} version of Red vs. Blue!</p>
-        <p>During the ${firstOrSecond} version of Red vs. Blue, to what extent did you feel<br><b>immersed</b> and <b>engaged</b> in what you were doing?</p>
+        <p>Thank you for completing ${gameName}!</p>
+        <p>During ${gameName}, to what extent did you feel<br><b>immersed</b> and <b>engaged</b> in what you were doing?</p>
         <p>Report the degree to which you felt immersed and engaged by answering the following questions.</p></div>`;
         this.questions = [
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During the ${firstOrSecond} version of Red vs. Blue, how <strong>absorbed</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>absorbed</strong> did you feel in what you were doing?</div>`,
                 name: `absorbed`,
                 labels: ["0<br>Not very absorbed", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More absorbed than I've ever felt"],
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During the ${firstOrSecond} version of Red vs. Blue, how <strong>immersed</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>immersed</strong> did you feel in what you were doing?</div>`,
                 name: `immersed`,
                 labels: ["0<br>Not very immersed", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More immersed than I've ever felt"],
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During the ${firstOrSecond} version of Red vs. Blue, how <strong>engaged</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>engaged</strong> did you feel in what you were doing?</div>`,
                 name: `engaged`,
                 labels: ["0<br>Not very engaged", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More engaged than I've ever felt"],
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During the ${firstOrSecond} version of Red vs. Blue, how <strong>engrossed</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>engrossed</strong> did you feel in what you were doing?</div>`,
                 name: `engrossed`,
                 labels: ["0<br>Not very engrossed", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More engrossed than I've ever felt"],
                 required: true,
@@ -1058,41 +1200,41 @@ const exp = (function() {
     };
 
     function MakeEnjoyQs(round) {
-        const firstOrSecond = (round == 1) ? "first" : "second";
+        const gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
         this.type = jsPsychSurveyLikert;
         this.preamble = `<div style='padding-top: 50px; width: 850px; font-size:16px; color:rgb(109, 112, 114)'>
 
-        <p>Below are a few more questions about the ${firstOrSecond} version of Red vs. Blue.</p>
+        <p>Below are a few more questions about ${gameName}.</p>
 
         <p>Instead of asking about immersion and engagement, these questions ask about <strong>enjoyment</strong>.<br>
-        Report how much you <strong>enjoyed</strong> the ${firstOrSecond} version of Red vs. Blue by answering the following questions.</p></div>`;
+        Report how much you <strong>enjoyed</strong> ${gameName} by answering the following questions.</p></div>`;
         this.questions = [
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>enjoy</strong> playing the ${firstOrSecond} version of Red vs. Blue?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>enjoy</strong> playing ${gameName}?</div>`,
                 name: `enjoyable`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>like</strong> playing the ${firstOrSecond} version of Red vs. Blue?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>like</strong> playing ${gameName}?</div>`,
                 name: `like`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>dislike</strong> playing the ${firstOrSecond} version of Red vs. Blue?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>dislike</strong> playing ${gameName}?</div>`,
                 name: `dislike`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much <strong>fun</strong> did you have playing the ${firstOrSecond} version of Red vs. Blue?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much <strong>fun</strong> did you have playing ${gameName}?</div>`,
                 name: `fun`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How <strong>entertaining</strong> was the ${firstOrSecond} version of Red vs. Blue?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How <strong>entertaining</strong> was ${gameName}?</div>`,
                 name: `entertaining`,
                 labels: zeroToExtremely,
                 required: true,
@@ -1107,11 +1249,11 @@ const exp = (function() {
     };
 
     function MakeEffortQs(round) {
-        const firstOrSecond = (round == 1) ? "first" : "second";
+        const gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
         this.type = jsPsychSurveyLikert;
         this.questions = [
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How <b>effortful</b> was the ${firstOrSecond} version of Red vs. Blue?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How <b>effortful</b> was ${gameName}?</div>`,
                 name: `effort`,
                 labels: zeroToALot,
                 required: true,
@@ -1311,7 +1453,7 @@ const exp = (function() {
     p.save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "5OWDUW48D7Kw",
+        experiment_id: "uyK6jZPtcyqi",
         filename: dmPsych.filename,
         data_string: ()=>jsPsych.data.get().csv()
     };
@@ -1320,7 +1462,7 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice,
-    exp.leftOrRight_timeline_1, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
+const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice, exp.leftOrRight_timeline_1, 
+    exp.intro_round2, exp.combinedPractice2, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);
