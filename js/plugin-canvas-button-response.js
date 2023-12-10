@@ -53,11 +53,17 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
               pretty_name: "Canvas size",
               default: [500, 500],
           },
-          /** Number of spins before game finishes. */
-          nSpins: {
+          /** Player's total score. */
+          score: {
               type: jspsych.ParameterType.INT,
-              pretty_name: "Number of spins",
-              default: 20,
+              pretty_name: "Score",
+              default: 0,
+          },
+          /** Player's starting number of spins. */
+          spin_num: {
+              type: jspsych.ParameterType.INT,
+              pretty_name: "Score",
+              default: 5,
           },
       },
   };
@@ -76,6 +82,10 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
       trial(display_element, trial) {
           // create canvas
           var html = 
+              '<div class="score-board">' +
+                '<div class="score-board-title">Total Score</div>' +
+                '<div class="score-board-score" id="score" >' + trial.score + '</div>' +
+              '</div>' +
               '<div id="jspsych-canvas-button-response-stimulus">' +
                 '<canvas id="jspsych-canvas-stimulus" height="' +
                 trial.canvas_size[0] +
@@ -83,7 +93,8 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
                 trial.canvas_size[1] +
                 '"></canvas>' +
                 '<div id="spin"></div>' +
-              "</div>";
+              "</div>"+
+              "<div><p>Keep spinning the wheel until the game ends.</p></div>";
 
           //show prompt if there is one
           if (trial.prompt !== null) {
@@ -97,7 +108,6 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
           // store data
           let spinnerData = {
             outcomes: [],
-            pressTimes: [],
             score: 0,
             rt: null,
           };
@@ -113,7 +123,6 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
               // gather the data to store for the trial
               var trial_data = {
                   outcomes: spinnerData.outcomes,
-                  pressTimes: spinnerData.pressTimes,
                   score: spinnerData.score,
                   rt: spinnerData.rt,
               };
@@ -144,7 +153,7 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
           }
           // end trial
           const waitForEnd = setInterval(function() {
-            if(spinnerData.outcomes.length >= trial.nSpins) {
+            if(spinnerData.outcomes.length >= 10) {
               clearInterval(waitForEnd);
               setTimeout(after_response, 1000);
             }
