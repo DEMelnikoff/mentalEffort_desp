@@ -24,7 +24,6 @@ const exp = (function() {
         difficulty_2: settings.difficulty[1],
     });
 
-    console.log(settings.gameType, settings.difficulty);
 
    /*
     *
