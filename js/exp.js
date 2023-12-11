@@ -55,8 +55,8 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>The first game is called Spin the Wheel.</p>
                     <p>In Spin the Wheel, you'll repeatedly spin a prize wheel. Each time you spin the wheel, you'll earn points.
-                    The number of points you earn depends on where the wheel lands. If the wheel lands on a 4, you'll earn 4 points; if the wheel lands on a 5, you'll earn 5 points; and so on.</p>
-                    <p>Your goal is to earn as many points as possible by spinning the prize wheel!</p>`
+                    The number of points you earn depends on where the wheel lands. For example, if the wheel lands on a 4, you'll earn 4 points, and if the wheel lands on a 5, you'll earn 5 points.</p>
+                    <p>Your goal is to earn as many points as possible!</p>`
                 },
             ],
             [
