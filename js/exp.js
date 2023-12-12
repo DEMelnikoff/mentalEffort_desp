@@ -88,14 +88,16 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>Spin the Wheel is now complete!</p>
-                    <p>To learn about and play the second game, continue to the next screen.</p></p>`
+                    prompt: `<p><strong>What makes some activities more immersive and engaging than others?</strong></p>
+                    <p>We're interested in why people feel effortlessly engaged in some activities (such as engrossing video games), but struggle to focus on other activities.</p>
+                    <p>To help us, you'll play a game called ${settings.gameName}. After the game, you'll report how immersed and engaged you felt.</p>
+                    <p>Continue to learn about ${settings.gameName}.`
                 },
             ],
             [
                 {
                     type: 'html',
-                    prompt: `<p>The second came is called ${settings.gameName}. It takes place in a play area like this one:</p>
+                    prompt: `<p>${settings.gameName} takes place in a play area like this one:</p>
                     <div class="play-area-inst">
                     </div>`
                 },
@@ -452,7 +454,15 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>Practice is now complete.</p>
-                        <p>Next, you'll learn how to earn tokens in ${settings.gameName}.</p>`
+                        <p>Continue to learn more about ${settings.gameName}.</p>`
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt:  `<p>Throughout ${settings.gameName}, you'll compete for a chance to win a <b>$100.00 bonus prize</b>.</p>
+                        <p>Specifically, during ${settings.gameName}, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
+                        <p>To learn how to earn tokens, continue to the next screen.</p>`
                     },
                 ],
                 [
@@ -554,7 +564,15 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>Practice is now complete.</p>
-                        <p>Next, you'll learn how to earn tokens in ${settings.gameName}.</p>`
+                        <p>Continue to learn more about ${settings.gameName}.</p>`
+                    },
+                ],
+                [
+                    {
+                        type: 'html',
+                        prompt:  `<p>Throughout ${settings.gameName}, you'll compete for a chance to win a <b>$100.00 bonus prize</b>.</p>
+                        <p>Specifically, during ${settings.gameName}, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
+                        <p>To learn how to earn tokens, continue to the next screen.</p>`
                     },
                 ],
                 [
@@ -1194,7 +1212,7 @@ const exp = (function() {
         const taskComplete = {
             type: jsPsychInstructions,
             pages: [`<div class='parent' style='color: rgb(109, 112, 114)'>
-                    <p>Both games are now complete!</p>
+                    <p>The game is now complete!</p>
                     <p>To finish this study, please continue to answer a few final questions.</p>
                     </div>`],
             show_clickable_nav: true,
@@ -1358,7 +1376,7 @@ const exp = (function() {
     p.save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "weB7N8ZD3jgh",
+        experiment_id: "EAew1IAB7tAt",
         filename: dmPsych.filename,
         data_string: ()=>jsPsych.data.get().csv()
     };
@@ -1367,6 +1385,6 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.consent, exp.intro_spin, exp.spinner_timeline, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice, exp.redVsBlue_timeline, exp.demographics, exp.save_data];
+const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice, exp.redVsBlue_timeline, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);
