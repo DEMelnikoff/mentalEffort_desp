@@ -83,7 +83,7 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
           // create canvas
           var html = 
               '<div class="score-board">' +
-                '<div class="score-board-title">Total Score</div>' +
+                '<div class="score-board-title">Total Tokens</div>' +
                 '<div class="score-board-score" id="score" >' + trial.score + '</div>' +
               '</div>' +
               '<div id="jspsych-canvas-button-response-stimulus">' +
@@ -94,7 +94,7 @@ var jsPsychCanvasButtonResponse = (function (jspsych) {
                 '"></canvas>' +
                 '<div id="spin"></div>' +
               "</div>"+
-              "<div><p>Keep spinning the wheel until the game ends.</p><p>Your goal is to win as many points as possible!</p></div>";
+              "<div><p>Keep spinning the wheel until the game ends.</p><p>Your goal is to win as many tokens as possible!</p></div>";
 
           //show prompt if there is one
           if (trial.prompt !== null) {

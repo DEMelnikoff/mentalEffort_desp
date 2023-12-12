@@ -23,6 +23,7 @@ const exp = (function() {
         difficulty: settings.difficulty,
     });
 
+    console.log(settings.gameType, settings.difficulty)
 
    /*
     *
@@ -44,24 +45,31 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p><strong>What makes some activities more immersive and engaging than others?</strong></p>
                     <p>We're interested in why people feel effortlessly engaged in some activities (such as engrossing video games), but struggle to focus on other activities.</p>
-                    <p>To help us, you'll play two different games. After each game, you'll report how immersed and engaged you felt.</p>
-                    <p>To learn about and play the first game, continue to the next screen.</p></p>`
+                    <p>To help us, you'll play two different games. After each game, you'll report how immersed and engaged you felt.</p>`
+                },
+            ],
+            [
+                {
+                    type: 'html',
+                    prompt:  `<p>Throughout both games, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
+                    <p>Specifically, during both games, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible across the two games.</p>
+                    <p>To learn about the first game, continue to the next screen.</p>`
                 },
             ],
             [
                 {
                     type: 'html',
                     prompt: `<p>The first game is called Spin the Wheel.</p>
-                    <p>In Spin the Wheel, you'll repeatedly spin a prize wheel. Each time you spin the wheel, you'll earn points.
-                    The number of points you earn depends on where the wheel lands. For example, if the wheel lands on a 4, you'll earn 4 points, and if the wheel lands on a 5, you'll earn 5 points.</p>
-                    <p>Your goal is to earn as many points as possible!</p>`
+                    <p>In Spin the Wheel, you'll repeatedly spin a prize wheel. Each time you spin the wheel, you'll earn tokens.
+                    The number of tokens you earn depends on where the wheel lands. For example, if the wheel lands on a 4, you'll earn 4 tokens, and if the wheel lands on a 5, you'll earn 5 tokens.</p>
+                    <p>Your goal is to earn as many points as tokens!</p>`
                 },
             ],
             [
                 {
                     type: 'html',
                     prompt: `<p>To spin a prize wheel, just grab it with your cursor and give it a spin! Watch the animation below to see how it's done.</p>
-                    <img src="./img/spinGif.gif" style="width:90%; height:90%; display:block; margin:auto">`
+                    <img src="./img/spinGif2.gif" style="width:70%; height:70%; display:block; margin:auto">`
                 },
             ],
             [
@@ -444,9 +452,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>Practice is now complete.</p>
-                        <p>Next, you'll play ${settings.gameName}. During ${settings.gameName}, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
-                        <p>Specifically, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
-                        <p>Continue to learn how to earn tokens!</p>`
+                        <p>Next, you'll learn how to earn tokens in ${settings.gameName}.</p>`
                     },
                 ],
                 [
@@ -548,9 +554,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>Practice is now complete.</p>
-                        <p>Next, you'll play ${settings.gameName}. During ${settings.gameName}, you'll be competing for a chance to win a <b>$100.00 bonus prize</b>.</p>
-                        <p>Specifically, you'll earn tokens. The tokens you earn will be entered into a lottery, and if one of your tokens is drawn, you'll win $100.00. To maximize your chances of winning a $100.00 bonus, you'll need to earn as many tokens as possible.</p>
-                        <p>Continue to learn how to earn tokens!</p>`
+                        <p>Next, you'll learn how to earn tokens in ${settings.gameName}.</p>`
                     },
                 ],
                 [
@@ -1354,7 +1358,7 @@ const exp = (function() {
     p.save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "y0ygkmOg494P",
+        experiment_id: "weB7N8ZD3jgh",
         filename: dmPsych.filename,
         data_string: ()=>jsPsych.data.get().csv()
     };
