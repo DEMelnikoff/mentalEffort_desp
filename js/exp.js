@@ -311,7 +311,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>For example, if you respond correctly three times in a row, you'll see this message:</p> 
-                        <div class="play-area-inst">    
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="streak-title-text" style="font-size:45px">Current Streak:</div> 
                             <div class="streak-number-text" style="font-size:60px">3</div>                                               
                         </div>`,
@@ -327,7 +327,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>For example, if you respond incorrectly after achieving a streak of three, you'll see this message indicating that you earned 30 tokens.</p> 
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                         </div>`,
                     },
@@ -336,7 +336,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you respond incorrectly after failing to start a streak, you'll see this message indicating that you earned 0 tokens.</p> 
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="loss-text-inst">+0 Tokens</div>
                         </div>`,
                     },
@@ -352,7 +352,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after a streak of three:</p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
                         </div>`,
@@ -363,7 +363,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after a streak of zero:</p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
                         </div>`,
@@ -373,7 +373,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after a streak of three:</p></p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>
                         </div>`,
@@ -383,7 +383,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>This is what you'd see if you randomly lost 5 tokens after a streak of zero:</p></p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">    
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>
                         </div>`,
@@ -399,7 +399,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In ${settings.gameName_1}, most players respond correctly <b>${settings.pctCorrect[0]}</b> of the time.`
+                        prompt: `<p>In ${settings.gameName_1}, most players miss the tile <b>${settings.pctCorrect[0]}</b> of the time.`
                     },
                 ],
             ],
