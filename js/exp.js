@@ -12,7 +12,7 @@ const exp = (function() {
         gameType: ['streak', 'bern'][Math.floor(Math.random() * 2)],
         difficulty: [['easy', 'hard'], ['hard', 'easy']][difficultyDraw],
         harderOrEasier: ['harder', 'easier'][difficultyDraw],
-        pctCorrect: [['85%', '55%'], ['55%', '85%']][difficultyDraw],
+        pctCorrect: [['15%', '50%'], ['50%', '15%']][difficultyDraw],
         nTrials: 50,
         colorNames_1: [['blue', 'red'], ['purple', 'orange']][colorDraw],
         colorNames_2: [['blue', 'red'], ['purple', 'orange']][1 - colorDraw],
@@ -40,8 +40,8 @@ const exp = (function() {
     function MakeAttnChk(settings, round) {
 
         let incorrectA = (settings.gameType == "streak") ? `30 tokens` : `10 tokens`;
-        let pctA_1 = (settings.difficulty[0] == "hard") ? `55% of the time.` : `85% of the time.`;
-        let pctA_2 = (settings.difficulty[1] == "hard") ? `55% of the time.` : `85% of the time.`;
+        let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `15% of the time.`;
+        let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `15% of the time.`;
 
         let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `If I respond after the tile disappears, my response will be incorrect.`, pctA_1];
         let correctAnswers_2 = [pctA_2];
@@ -81,9 +81,9 @@ const exp = (function() {
                         options: [`I can take as long as I want to respond to each tile.`, `If I respond after the tile disappears, my response will be incorrect.`],
                     },
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players respond correctly?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players miss the tile?`, 
                         name: `attnChk6`, 
-                        options: [`0% of the time.`, `55% of the time.`, `85% of the time.`, `100% of the time.`],
+                        options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -204,7 +204,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>For example, if you respond correctly, you'll see this message indicating that you earned 10 tokens.</p> 
-                        <div class="play-area-inst">               
+                        <div class="play-area-inst" style="border:0px solid white">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                         </div>`,
                     },
@@ -213,7 +213,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you respond incorrectly, you'll see this message indicating that you earned 0 tokens.</p> 
-                        <div class="play-area-inst">               
+                        <div class="play-area-inst" style="border:0px solid white">               
                             <div class="loss-text-inst">+0 Tokens</div>
                         </div>`,
                     },
@@ -230,7 +230,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after responding correctly:</p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
                         </div>`,
@@ -240,7 +240,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after responding incorrectly.</p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
                         </div>`,
@@ -250,7 +250,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after responding correctly:</p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
                         </div>`
@@ -260,7 +260,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>This is what you'd see if you randomly lost 5 tokens after responding incorrectly:</p>
-                        <div class="play-area-inst">
+                        <div class="play-area-inst" style="border:0px solid white">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
                         </div>`
@@ -270,13 +270,13 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
-                        <p>Each tile will disappear very quickly. If you fail to respond correctly before a tile disappears, your response will be considered incorrect.</p>`
+                        <p>Each tile will disappear very quickly. If you fail to respond correctly before a tile disappears, your response will be considered a miss.</p>`
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In ${settings.gameName_1}, most players respond correctly <b>${settings.pctCorrect[0]}</b> of the time.`
+                        prompt: `<p>In ${settings.gameName_1}, most players miss the tile <b>${settings.pctCorrect[0]}</b> of the time.`
                     },
                 ],
             ],
@@ -597,31 +597,29 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>If you respond correctly, the tile will "activate" like this:</p>
-                    <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:green; left:20%; top:75%"></div>
-                        <div class="stroop-stim-inst" style="color:white; top:75%; left:20%">&#x2713;</div>
+                    prompt: `<p>If you respond correctly, you'll see this message indicating that you got a hit.</p>
+                    <div class="play-area-inst" style="border:0px solid white">
+                        <div class="win-text-inst" style="color:green">Hit!</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
-                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
+                        <div class="q-key"></div>
+                        <div class="p-key"></div>
                     </div>`
                 },
             ],
-
             [
                 {
                     type: 'html',
-                    prompt: `<p>If you respond incorrectly, the tile will disappear.</p>
-                    <div class="play-area-inst">
+                    prompt: `<p>If you respond incorrectly, you'll see this message indicating that you got a miss.</p>
+                    <div class="play-area-inst" style="border:0px solid white">
+                        <div class="loss-text-inst">Miss!</div>
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
-                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
+                        <div class="q-key"></div>
+                        <div class="p-key"></div>
                     </div>`
                 },
             ],
-
             [
                 {
                     type: 'html',
@@ -1454,7 +1452,7 @@ const exp = (function() {
     p.save_data = {
         type: jsPsychPipe,
         action: "save",
-        experiment_id: "uyK6jZPtcyqi",
+        experiment_id: "s8QSmUj1vsOe",
         filename: dmPsych.filename,
         data_string: ()=>jsPsych.data.get().csv()
     };
