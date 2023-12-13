@@ -419,8 +419,8 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In ${settings.gameName_2}, most players respond correctly at a higher rate compared to ${settings.gameName_1}.</p>
-                        <p>Specifically, in ${settings.gameName_2}, most players respond corrrectly <b>${settings.pctCorrect[1]}</b> of the time.</p>`
+                        prompt: `<p>${settings.gameName_2} is designed to be ${settings.harderOrEasier} than ${settings.gameName_1}.</p>
+                        <p>Specifically, in ${settings.gameName_2}, most players miss the tile <b>${settings.pctCorrect[1]}</b> of the time.</p>`
                     },
                 ],
             ],
