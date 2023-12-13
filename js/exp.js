@@ -40,7 +40,7 @@ const exp = (function() {
         let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `15% of the time.`;
         let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `15% of the time.`;
 
-        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `I'll miss the tile if I respond to slowly.`, pctA_1];
+        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `I'll miss the tile if I respond too slowly.`, pctA_1];
         let correctAnswers_2 = [pctA_2];
 
         let attnChk;
@@ -53,12 +53,12 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond correctly to a tile, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you get a hit, you'll earn...</div>", 
                         name: `attnChk1`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond incorrectly to a tile, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you miss, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
@@ -75,7 +75,7 @@ const exp = (function() {
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
-                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond to slowly.`],
+                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond too slowly.`],
                     },
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players miss the tile?`, 
@@ -97,12 +97,12 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond incorrectly after achieving a streak of three, you will earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you miss after achieving a streak of three, you'll earn...</div>", 
                         name: `attnChk1`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you respond incorrectly after failing to start a streak, you will earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you miss after failing to start a streak, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
@@ -119,7 +119,7 @@ const exp = (function() {
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
-                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond to slowly.`],
+                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond too slowly.`],
                     },
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players respond correctly?`, 
@@ -141,7 +141,7 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_2}, how often do most players miss the tile?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_2}, how often do players miss?`, 
                         name: `attnChk7`, 
                         options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
                     },
@@ -192,15 +192,15 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<div class='parent'>
-                        <p>In ${settings.gameName_1}, players earn 10 tokens for every correct response.</p>
-                        <p>Players earn 0 tokens for every incorrect response.</p>
+                        <p>In ${settings.gameName_1}, players earn 10 tokens for every hit.</p>
+                        <p>Players earn 0 tokens for every miss.</p>
                         </div>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>For example, if you respond correctly, you'll see this message indicating that you earned 10 tokens.</p> 
+                        prompt: `<p>For example, if you get a hit, you'll see this message indicating that you earned 10 tokens.</p> 
                         <div class="play-area-inst" style="border:0px solid white">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                         </div>`,
@@ -209,7 +209,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you respond incorrectly, you'll see this message indicating that you earned 0 tokens.</p> 
+                        prompt: `<p>If you miss, you'll see this message indicating that you earned 0 tokens.</p> 
                         <div class="play-area-inst" style="border:0px solid white">               
                             <div class="loss-text-inst">+0 Tokens</div>
                         </div>`,
@@ -226,7 +226,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after responding correctly:</p>
+                        prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after a hit:</p>
                         <div class="play-area-inst" style="border:0px solid white">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
@@ -236,7 +236,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after responding incorrectly.</p>
+                        prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after a miss.</p>
                         <div class="play-area-inst" style="border:0px solid white">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
@@ -246,7 +246,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after responding correctly:</p>
+                        prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after a hit:</p>
                         <div class="play-area-inst" style="border:0px solid white">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
@@ -256,7 +256,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>This is what you'd see if you randomly lost 5 tokens after responding incorrectly:</p>
+                        prompt: `<p>This is what you'd see if you randomly lost 5 tokens after a miss:</p>
                         <div class="play-area-inst" style="border:0px solid white">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
@@ -267,7 +267,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
-                        <p>Each tile will disappear very quickly. If you fail to respond correctly before a tile disappears, your response will be considered a miss.</p>`
+                        <p>Each tile will disappear very quickly. If you fail to respond before a tile disappears, your response will be considered a miss.</p>`
                     },
                 ],
                 [
@@ -295,22 +295,22 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In ${settings.gameName_1}, players earn tokens for streaks of consecutive successes.</p>
-                        <p>Specifically, players earn 10 tokens for every consecutive correct response.</p>
-                        <p>For example, a streak of 2 consecutive successes is worth 20 cents, 
-                        a streak of 3 consecutive successes is worth 30 cents, and so on.</p>`,
+                        prompt: `<p>In ${settings.gameName_1}, players earn tokens for streaks of consecutive hits.</p>
+                        <p>Specifically, players earn 10 tokens for every consecutive hit.</p>
+                        <p>For example, a streak of 2 consecutive hits is worth 20 cents, 
+                        a streak of 3 consecutive hits is worth 30 cents, and so on.</p>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Each time you respond correctly, you'll see the length of your current streak.</p>`
+                        prompt: `<p>Each time you get a hit, you'll see the length of your current streak.</p>`
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>For example, if you respond correctly three times in a row, you'll see this message:</p> 
+                        prompt: `<p>For example, if you get three hits in a row, you'll see this message:</p> 
                         <div class="play-area-inst" style="border:0px solid white">    
                             <div class="streak-title-text" style="font-size:45px">Current Streak:</div> 
                             <div class="streak-number-text" style="font-size:60px">3</div>                                               
@@ -320,13 +320,13 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Each time you respond incorrectly, you'll see how many tokens you earned from your streak.</p>`
+                        prompt: `<p>Each time you miss, you'll see how many tokens you earned from your streak.</p>`
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>For example, if you respond incorrectly after achieving a streak of three, you'll see this message indicating that you earned 30 tokens.</p> 
+                        prompt: `<p>For example, if you miss after achieving a streak of three, you'll see this message indicating that you earned 30 tokens.</p> 
                         <div class="play-area-inst" style="border:0px solid white">    
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                         </div>`,
@@ -335,7 +335,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you respond incorrectly after failing to start a streak, you'll see this message indicating that you earned 0 tokens.</p> 
+                        prompt: `<p>If you miss after failing to start a streak, you'll see this message indicating that you earned 0 tokens.</p> 
                         <div class="play-area-inst" style="border:0px solid white">    
                             <div class="loss-text-inst">+0 Tokens</div>
                         </div>`,
@@ -393,7 +393,7 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
-                        <p>Each tile will disappear very quickly. If you fail to respond correctly before a tile disappears, your response will be considered incorrect.</p>`
+                        <p>Each tile will disappear very quickly. If you fail to respond before a tile disappears, your response will be considered a miss.</p>`
                     },
                 ],
                 [
