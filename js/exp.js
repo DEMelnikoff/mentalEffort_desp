@@ -40,7 +40,7 @@ const exp = (function() {
         let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `15% of the time.`;
         let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `15% of the time.`;
 
-        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `If I respond after the tile disappears, my response will be incorrect.`, pctA_1];
+        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `I'll miss the tile if I respond to slowly.`, pctA_1];
         let correctAnswers_2 = [pctA_2];
 
         let attnChk;
@@ -75,7 +75,7 @@ const exp = (function() {
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
-                        options: [`I can take as long as I want to respond to each tile.`, `If I respond after the tile disappears, my response will be incorrect.`],
+                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond to slowly.`],
                     },
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players miss the tile?`, 
@@ -119,7 +119,7 @@ const exp = (function() {
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
-                        options: [`I can take as long as I want to respond to each tile.`, `If I respond after the tile disappears, my response will be incorrect.`],
+                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond to slowly.`],
                     },
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players respond correctly?`, 
@@ -141,9 +141,9 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_2}, how often do most players respond correctly?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_2}, how often do most players miss the tile?`, 
                         name: `attnChk7`, 
-                        options: [`0% of the time.`, `55% of the time.`, `85% of the time.`, `100% of the time.`],
+                        options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
                     },
                 ],
                 scale_width: 500,
