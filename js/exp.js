@@ -40,7 +40,7 @@ const exp = (function() {
         let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `15% of the time.`;
         let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `15% of the time.`;
 
-        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `I'll miss the tile if I respond too slowly.`, pctA_1];
+        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `I'll miss if I respond too slowly.`, pctA_1];
         let correctAnswers_2 = [pctA_2];
 
         let attnChk;
@@ -63,22 +63,22 @@ const exp = (function() {
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>After each response, what are your chances of winning 5 extra tokens?</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>After each hit or miss, what are your chances of winning 5 extra tokens?</div>", 
                         name: `attnChk3`, 
                         options: [`0%`, `10%`, `20%`, `30%`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>After each response, what are your chances of losing 5 tokens?</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>After each hit or miss, what are your chances of losing 5 tokens?</div>", 
                         name: `attnChk4`, 
                         options: [`0%`, `10%`, `20%`, `30%`],
                     },
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
-                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond too slowly.`],
+                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss if I respond too slowly.`],
                     },
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players miss the tile?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players miss?`, 
                         name: `attnChk6`, 
                         options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
                     },
@@ -119,12 +119,12 @@ const exp = (function() {
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>Which statement is true?</div>`, 
                         name: `attnChk5`, 
-                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss the tile if I respond too slowly.`],
+                        options: [`I can take as long as I want to respond to each tile.`, `I'll miss if I respond too slowly.`],
                     },
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do most players respond correctly?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players miss?`, 
                         name: `attnChk6`, 
-                        options: [`0% of the time.`, `55% of the time.`, `85% of the time.`, `100% of the time.`],
+                        options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
                     },
                 ],
                 scale_width: 500,
