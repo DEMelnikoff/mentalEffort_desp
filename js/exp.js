@@ -34,9 +34,6 @@ const exp = (function() {
     *
     */
 
-    console.log(settings.gameType, settings.difficulty, settings.colorNames_1);
-
-
     function MakeAttnChk(settings, round) {
 
         let incorrectA = (settings.gameType == "streak") ? `30 tokens` : `10 tokens`;
