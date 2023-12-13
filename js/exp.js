@@ -837,7 +837,7 @@ const exp = (function() {
 
         // html
         const playArea = '<div class="play-area">' + `<div class="header" style="visibility:hidden">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}; top:{yPos}; left:{xPos}"></div>' + '<div class="stroop-stim" style="color:{stimColor}; top:{yPos}; left:{xPos}">{stimContent}</div>' +'</div>';
-        const feedbackArea = '<div class="play-area">{token-text}{extra-text}</div>';
+        const feedbackArea = '<div class="play-area" style="border:0px solid white">{token-text}{extra-text}</div>';
         const winText = '<div class="win-text">+10 Tokens</div>';
         const lossText = '<div class="loss-text">+0 Tokens</div>';
         const plusText = '<div class="plus-text">+5 Bonus</div>';
@@ -991,7 +991,9 @@ const exp = (function() {
                 let stimContent = "&#x2713;"
                 let borderStyle = (correct == 1) ? null : null;
                 let outcome_html;
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stimContent) + keyLabels;
+                let hitOrMiss = (correct == 1) ? winText.replace('+10 Tokens', `Hit!`) : lossText.replace('+0 Tokens', `Miss!`);
+                // return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', tileColor).replace('{borderStyle}', borderStyle).replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stimColor).replace('{stimContent}', stimContent) + keyLabels;
+                return feedbackArea.replace('{token-text}', hitOrMiss).replace('{extra-text}', '');
             },
             choices: "NO_KEYS",
             trial_duration: 1000,
@@ -1032,10 +1034,9 @@ const exp = (function() {
                 let bonusFeedbackType = (correct == 1) ? tokenArray_win.pop() : tokenArray_loss.pop();
                 let bonusFeedback = (bonusFeedbackType == 'plus') ? plusText : (bonusFeedbackType == 'minus') ? minusText : '';
                 if (gameType == 'streak' && correct == 1 && trial < settings.nTrials) {
-                    return feedbackArea.replace('{token-text}', `<div class="streak-title-text">Current Streak:</div>`).replace('{extra-text}', `<div class="streak-number-text">${streak}</div>`) + keyLabels;
-                    // return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '') + keyLabels;
+                    return feedbackArea.replace('{token-text}', `<div class="streak-title-text">Current Streak:</div>`).replace('{extra-text}', `<div class="streak-number-text">${streak}</div>`);
                 } else {
-                    return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback) + keyLabels;
+                    return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback);
                 }
             },
             choices: "NO_KEYS",
