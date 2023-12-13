@@ -297,8 +297,8 @@ const exp = (function() {
                         type: 'html',
                         prompt: `<p>In ${settings.gameName_1}, players earn tokens for streaks of consecutive hits.</p>
                         <p>Specifically, players earn 10 tokens for every consecutive hit.</p>
-                        <p>For example, a streak of 2 consecutive hits is worth 20 cents, 
-                        a streak of 3 consecutive hits is worth 30 cents, and so on.</p>`,
+                        <p>For example, a streak of 2 consecutive hits is worth 20 tokens, 
+                        a streak of 3 consecutive hits is worth 30 tokens, and so on.</p>`,
                     },
                 ],
                 [
