@@ -1039,7 +1039,6 @@ const exp = (function() {
                         let penalty = Math.min(streak * 50, 500)
                         duration = 1200 - penalty;
                     }
-                    console.log(streak, duration);
                     return duration;
                 }
             },
