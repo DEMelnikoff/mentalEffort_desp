@@ -1028,10 +1028,19 @@ const exp = (function() {
                 return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#D9D9D9').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]) + keyLabels;
             },
             trial_duration: () => {
+                let duration;
                 if (isPractice) {
                     return 10000;
                 } else {
-                    return 1150;
+                    if (settings.difficulty[round] == "hard") {
+                        let penalty = Math.min(streak * 125, 500)
+                        duration = 1200 - penalty;
+                    } else if (settings.difficulty[round] == "easy") {
+                        let penalty = Math.min(streak * 50, 500)
+                        duration = 1200 - penalty;
+                    }
+                    console.log(streak, duration);
+                    return duration;
                 }
             },
             data: {phase: 'response', round: round + 1},
