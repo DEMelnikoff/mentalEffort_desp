@@ -1116,7 +1116,7 @@ const exp = (function() {
                 const tileContent = makeStimulus(stim, nCorrect, "response", correct, false);
                 return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives]) + keyLabels;
             },
-            trial_duration: 1000,
+            trial_duration: 1300,
             data: {phase: 'response', round: round + 1},
             on_finish: (data) => {
                 correct = (data.response == stim[3]) ? 1 : 0;
