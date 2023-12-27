@@ -9,7 +9,7 @@ const exp = (function() {
     const difficultyDraw = Math.floor(Math.random() * 2)
 
     let settings = {
-        gameType: ['bern', 'bern'][Math.floor(Math.random() * 2)],
+        gameType: ['bern', 'streak'][Math.floor(Math.random() * 2)],
         difficulty: [['easy', 'hard'], ['hard', 'easy']][difficultyDraw],
         harderOrEasier: ['harder', 'easier'][difficultyDraw],
         pctCorrect: [['80%', '40%'], ['40%', '80%']][difficultyDraw],
@@ -109,12 +109,12 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you win, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you fill all three slots, you'll earn...</div>", 
                         name: `attnChk1`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you lose, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you fill all three slots, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
