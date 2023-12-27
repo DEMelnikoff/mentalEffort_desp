@@ -9,10 +9,10 @@ const exp = (function() {
     const difficultyDraw = Math.floor(Math.random() * 2)
 
     let settings = {
-        gameType: ['bern', 'streak'][Math.floor(Math.random() * 2)],
+        gameType: ['bern', 'bern'][Math.floor(Math.random() * 2)],
         difficulty: [['easy', 'hard'], ['hard', 'easy']][difficultyDraw],
         harderOrEasier: ['harder', 'easier'][difficultyDraw],
-        pctCorrect: [['90%', '50%'], ['50%', '90%']][difficultyDraw],
+        pctCorrect: [['80%', '40%'], ['40%', '80%']][difficultyDraw],
         nTrials: 20,
         colorNames_1: [['blue', 'red'], ['blue', 'red']][colorDraw],
         colorNames_2: [['blue', 'red'], ['blue', 'red']][1 - colorDraw],
@@ -93,10 +93,10 @@ const exp = (function() {
 
         let secondVersion = (round == 2) ? ' the second version of ' : ' ';
         let incorrectA = (settings.gameType == "streak") ? `30 tokens` : `10 tokens`;
-        let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `90% of the time.`;
-        let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `90% of the time.`;
+        let pctA_1 = (settings.difficulty[0] == "hard") ? `40% of the time.` : `80% of the time.`;
+        let pctA_2 = (settings.difficulty[1] == "hard") ? `40% of the time.` : `80% of the time.`;
 
-        let correctAnswers_1 = [incorrectA, `0 tokens`, pctA_1];
+        let correctAnswers_1 = [incorrectA, `0 tokens`, `true`, pctA_1];
         let correctAnswers_2 = [pctA_2];
 
         let attnChk;
@@ -118,14 +118,14 @@ const exp = (function() {
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
+                    {
+                        prompt: "<div style='color: rgb(109, 112, 114)'>After each round, players have a 20% chance of winning 5 extra tokens and a 20% chance of losing 5 tokens.</div>", 
+                        name: `attnChk3`, 
+                        options: [`true`, `false`],
+                    },
                     /*
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>After each hit or miss, what are your chances of winning 5 extra tokens?</div>", 
-                        name: `attnChk3`, 
-                        options: [`0%`, `10%`, `20%`, `30%`],
-                    },
-                    {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>After each hit or miss, what are your chances of losing 5 tokens?</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>After each round, what are your chances of losing 5 tokens?</div>", 
                         name: `attnChk4`, 
                         options: [`0%`, `10%`, `20%`, `30%`],
                     },
@@ -137,8 +137,8 @@ const exp = (function() {
                     */
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players fill all three slots?`, 
-                        name: `attnChk6`, 
-                        options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
+                        name: `attnChk4`, 
+                        options: [`20% of the time.`, `40% of the time.`, `80% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -164,12 +164,12 @@ const exp = (function() {
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
-                    /*
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>After each streak, what are your chances of winning 5 extra tokens?</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>After each streak, players have a 20% chance of winning 5 extra tokens and a 20% chance of losing 5 tokens.</div>", 
                         name: `attnChk3`, 
-                        options: [`0%`, `10%`, `20%`, `30%`],
+                        options: [`true`, `false`],
                     },
+                    /*
                     {
                         prompt: "<div style='color: rgb(109, 112, 114)'>After each streak, what are your chances of losing 5 tokens?</div>", 
                         name: `attnChk4`, 
@@ -183,8 +183,8 @@ const exp = (function() {
                     */
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often to players fill all three slots?`, 
-                        name: `attnChk6`, 
-                        options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
+                        name: `attnChk4`, 
+                        options: [`20% of the time.`, `40% of the time.`, `80% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -202,8 +202,8 @@ const exp = (function() {
                 questions: [
                     {
                         prompt: `<div style='color: rgb(109, 112, 114)'>In the second version of ${settings.gameName_1}, how often do players fill all three slots?`, 
-                        name: `attnChk7`, 
-                        options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
+                        name: `attnChk5`, 
+                        options: [`20% of the time.`, `40% of the time.`, `80% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -281,7 +281,6 @@ const exp = (function() {
                         </div>`,
                     },
                 ],
-                /*
                 [
                     {
                         type: 'html',
@@ -297,6 +296,10 @@ const exp = (function() {
                         <div class="play-area-inst">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
@@ -307,6 +310,10 @@ const exp = (function() {
                         <div class="play-area-inst">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
@@ -317,6 +324,10 @@ const exp = (function() {
                         <div class="play-area-inst">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`
                     },
                 ],
@@ -327,10 +338,13 @@ const exp = (function() {
                         <div class="play-area-inst">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`
                     },
                 ],
-                */
                 [
                     {
                         type: 'html',
@@ -421,7 +435,6 @@ const exp = (function() {
                         </div>`,
                     },
                 ],
-                /*
                 [
                     {
                         type: 'html',
@@ -433,30 +446,41 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after a streak of three:</p>
-                        <div class="play-area-inst" style="border:0px solid white">    
+                        <div class="play-area-inst">   
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
-
                     },
                 ],
                 [
                     {
                         type: 'html',
                         prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after a streak of zero:</p>
-                        <div class="play-area-inst" style="border:0px solid white">    
+                        <div class="play-area-inst">   
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
-                        </div>`,
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
+                        </div>`
                     },
                 ],
                 [
                     {
                         type: 'html',
                         prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after a streak of three:</p></p>
-                        <div class="play-area-inst" style="border:0px solid white">    
+                        <div class="play-area-inst">   
                             <div class="win-text-inst" style="color:green">+30 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
@@ -464,20 +488,16 @@ const exp = (function() {
                     {
                         type: 'html',
                         prompt: `<p>This is what you'd see if you randomly lost 5 tokens after a streak of zero:</p></p>
-                        <div class="play-area-inst" style="border:0px solid white">    
+                        <div class="play-area-inst">   
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
-                        <p>Each tile will disappear very quickly. If you fail to respond before a tile disappears, your response will be considered a miss.</p>`
-                    },
-                ],
-                */
                 [
                     {
                         type: 'html',
@@ -659,7 +679,7 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>You'll have just 1 second to respond before the tile disappears!</p>
+                    prompt: `<p>You'll have just under 2 seconds to respond before the tile disappears!</p>
                     <div class="play-area-inst">
                         ${solidTile2_html}
                         ${lives_2}
@@ -941,6 +961,7 @@ const exp = (function() {
     const MakeTimeline = function(round, gameType, isPractice, practiceType, colorNames, colorHex) {
 
         let correct, stim;
+        let roundOutcome = null;
         let trial = 1;
         let top = 1;
         let episode = 0;
@@ -981,7 +1002,7 @@ const exp = (function() {
             [colorNames[1], colorHex[0], 'dashed', 'q'], 
         ];
 
-        let congruentStim = [...congruentStim_word, ...congruentStim_color, ...incongruentStim_word, ...incongruentStim_color];
+        let congruentStim = [...congruentStim_word, ...congruentStim_color, ...congruentStim_word, ...congruentStim_color, ...incongruentStim_word, ...incongruentStim_color];
 
         let congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
 
@@ -1116,7 +1137,7 @@ const exp = (function() {
                 const tileContent = makeStimulus(stim, nCorrect, "response", correct, false);
                 return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives]) + keyLabels;
             },
-            trial_duration: 1300,
+            trial_duration: 1500,
             data: {phase: 'response', round: round + 1},
             on_finish: (data) => {
                 correct = (data.response == stim[3]) ? 1 : 0;
@@ -1136,7 +1157,7 @@ const exp = (function() {
             stimulus: function() {
                 let nCorrect_adjusted = (correct && nCorrect == 2) ? 3 : nCorrect;
                 const tileContent = makeStimulus(stim, nCorrect_adjusted, "outcome", correct, false);
-                return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives - (1 - correct)]) + keyLabels;            
+                return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives - (1 - correct)]) + keyLabels;     
             },
             choices: "NO_KEYS",
             trial_duration: 1000,
@@ -1151,8 +1172,10 @@ const exp = (function() {
                 if (nCorrect == 3) {
                     streak++;
                     episode++;
+                    roundOutcome = 'win';
                 } else if (lives == 0) {
                     episode++;
+                    roundOutcome = 'lose';
                 };
 
                 if (episode == settings.nTrials || lives == 0) {
@@ -1201,20 +1224,28 @@ const exp = (function() {
                     if (isPractice) {
                         return feedbackArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;
                     } else if (gameType == "bern") {
-                        return feedbackArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{token-text}', winText).replace('{extra-text}', '') + keyLabels;
+                        return feedbackArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{token-text}', winText).replace('{extra-text}', bonusFeedback) + keyLabels;
                     } else if (gameType == "streak") {
                         if (episode == settings.nTrials) {
-                            return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;
+                            return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback) + keyLabels;
                         } else {
                             return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `<span style="color:green; font-weight:bold">${streak}</span>`).replace('{tileContent}', '').replace('{livesContent}', '') + keyLabels;            
-                        }
+                        };
                     };
                 } else {
-                    return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;
+                    if (isPractice) {
+                        return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;  
+                    } else {
+                        return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback) + keyLabels;  
+                    };
                 };
             },
             choices: "NO_KEYS",
-            trial_duration: 3000,
+            trial_duration: () => {
+                let latency = roundOutcome ? 3000 : 0;
+                console.log(latency, roundOutcome);
+                return latency
+            },
             data: {phase: 'feedback', round: round + 1},
             on_finish: function(data) {
                 if (tokenArray_win.length == 0) {
@@ -1223,9 +1254,11 @@ const exp = (function() {
                 if (tokenArray_loss.length == 0) {
                     tokenArray_loss = makeTokenArray();
                 };
+                data.roundOutcome = roundOutcome;
                 if (nCorrect == 3 || lives == 0) {
                     nCorrect = 0;
                     lives = 2;
+                    roundOutcome = null;
                 };
                 data.trial_idx = trial;
                 trial++;
