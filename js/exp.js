@@ -1263,33 +1263,33 @@ const exp = (function() {
 
     // constructor functions
     function MakeFlowQs(round) {
-        const gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
+        const secondVersion = (round == 1) ? ' ' : ' the second version of ';
         this.type = jsPsychSurveyLikert;
         this.preamble = `<div style='padding-top: 50px; width: 850px; font-size:16px; color:rgb(109, 112, 114)'>
-        <p>Thank you for completing ${gameName}!</p>
-        <p>During ${gameName}, to what extent did you feel<br><b>immersed</b> and <b>engaged</b> in what you were doing?</p>
+        <p>Thank you for completing${secondVersion}${settings.gameName_1}!</p>
+        <p>During${secondVersion}${settings.gameName_1}, to what extent did you feel<br><b>immersed</b> and <b>engaged</b> in what you were doing?</p>
         <p>Report the degree to which you felt immersed and engaged by answering the following questions.</p></div>`;
         this.questions = [
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>absorbed</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During${secondVersion}${settings.gameName_1}, how <strong>absorbed</strong> did you feel in what you were doing?</div>`,
                 name: `absorbed`,
                 labels: ["0<br>Not very absorbed", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More absorbed than I've ever felt"],
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>immersed</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During${secondVersion}${settings.gameName_1}, how <strong>immersed</strong> did you feel in what you were doing?</div>`,
                 name: `immersed`,
                 labels: ["0<br>Not very immersed", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More immersed than I've ever felt"],
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>engaged</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During${secondVersion}${settings.gameName_1}, how <strong>engaged</strong> did you feel in what you were doing?</div>`,
                 name: `engaged`,
                 labels: ["0<br>Not very engaged", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More engaged than I've ever felt"],
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>During ${gameName}, how <strong>engrossed</strong> did you feel in what you were doing?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>During${secondVersion}${settings.gameName_1}, how <strong>engrossed</strong> did you feel in what you were doing?</div>`,
                 name: `engrossed`,
                 labels: ["0<br>Not very engrossed", '1', '2', '3', '4', '5', '6', '7', '8', '9', "10<br>More engrossed than I've ever felt"],
                 required: true,
@@ -1304,41 +1304,41 @@ const exp = (function() {
     };
 
     function MakeEnjoyQs(round) {
-        const gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
+        const secondVersion = (round == 1) ? ' ' : ' the second version of ';
         this.type = jsPsychSurveyLikert;
         this.preamble = `<div style='padding-top: 50px; width: 850px; font-size:16px; color:rgb(109, 112, 114)'>
 
-        <p>Below are a few more questions about ${gameName}.</p>
+        <p>Below are a few more questions about${secondVersion}${settings.gameName_1}.</p>
 
         <p>Instead of asking about immersion and engagement, these questions ask about <strong>enjoyment</strong>.<br>
-        Report how much you <strong>enjoyed</strong> ${gameName} by answering the following questions.</p></div>`;
+        Report how much you <strong>enjoyed</strong>${secondVersion}${settings.gameName_1} by answering the following questions.</p></div>`;
         this.questions = [
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>enjoy</strong> playing ${gameName}?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>enjoy</strong> playing${secondVersion}${settings.gameName_1}?</div>`,
                 name: `enjoyable`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>like</strong> playing ${gameName}?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>like</strong> playing${secondVersion}${settings.gameName_1}?</div>`,
                 name: `like`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>dislike</strong> playing ${gameName}?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much did you <strong>dislike</strong> playing${secondVersion}${settings.gameName_1}?</div>`,
                 name: `dislike`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How much <strong>fun</strong> did you have playing ${gameName}?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How much <strong>fun</strong> did you have playing${secondVersion}${settings.gameName_1}?</div>`,
                 name: `fun`,
                 labels: zeroToALot,
                 required: true,
             },
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How <strong>entertaining</strong> was ${gameName}?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How <strong>entertaining</strong> was${secondVersion}${settings.gameName_1}?</div>`,
                 name: `entertaining`,
                 labels: zeroToExtremely,
                 required: true,
@@ -1353,11 +1353,11 @@ const exp = (function() {
     };
 
     function MakeEffortQs(round) {
-        const gameName = (round == 1) ? settings.gameName_1 : settings.gameName_2
+        const secondVersion = (round == 1) ? ' ' : ' the second version of ';
         this.type = jsPsychSurveyLikert;
         this.questions = [
             {
-                prompt: `<div style='color:rgb(109, 112, 114)'>How <b>effortful</b> was ${gameName}?</div>`,
+                prompt: `<div style='color:rgb(109, 112, 114)'>How <b>effortful</b> was${secondVersion}${settings.gameName_1}?</div>`,
                 name: `effort`,
                 labels: zeroToALot,
                 required: true,
