@@ -9,7 +9,7 @@ const exp = (function() {
     const difficultyDraw = Math.floor(Math.random() * 2)
 
     let settings = {
-        gameType: ['streak', 'streak'][Math.floor(Math.random() * 2)],
+        gameType: ['bern', 'streak'][Math.floor(Math.random() * 2)],
         difficulty: [['easy', 'hard'], ['hard', 'easy']][difficultyDraw],
         harderOrEasier: ['harder', 'easier'][difficultyDraw],
         pctCorrect: [['90%', '50%'], ['50%', '90%']][difficultyDraw],
