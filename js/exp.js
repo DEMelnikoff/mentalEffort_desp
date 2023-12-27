@@ -5,21 +5,21 @@ const exp = (function() {
 
     let p = {};
 
-    const colorDraw = Math.floor(Math.random() * 2);
+    const colorDraw = 0;
     const difficultyDraw = Math.floor(Math.random() * 2)
 
     let settings = {
-        gameType: ['streak', 'bern'][Math.floor(Math.random() * 2)],
+        gameType: ['streak', 'streak'][Math.floor(Math.random() * 2)],
         difficulty: [['easy', 'hard'], ['hard', 'easy']][difficultyDraw],
         harderOrEasier: ['harder', 'easier'][difficultyDraw],
-        pctCorrect: [['15%', '50%'], ['50%', '15%']][difficultyDraw],
-        nTrials: 50,
-        colorNames_1: [['blue', 'red'], ['purple', 'orange']][colorDraw],
-        colorNames_2: [['blue', 'red'], ['purple', 'orange']][1 - colorDraw],
-        colorHex_1: [['blue', '#ff0000'], ['purple', '#F37413']][colorDraw],
-        colorHex_2: [['blue', '#ff0000'], ['purple', '#F37413']][1 - colorDraw],
-        gameName_1: ["Blue vs. Red", "Purple vs. Orange"][colorDraw],
-        gameName_2: ["Blue vs. Red", "Purple vs. Orange"][1 - colorDraw],
+        pctCorrect: [['90%', '50%'], ['50%', '90%']][difficultyDraw],
+        nTrials: 20,
+        colorNames_1: [['blue', 'red'], ['blue', 'red']][colorDraw],
+        colorNames_2: [['blue', 'red'], ['blue', 'red']][1 - colorDraw],
+        colorHex_1: [['blue', '#ff0000'], ['blue', '#ff0000']][colorDraw],
+        colorHex_2: [['blue', '#ff0000'], ['blue', '#ff0000']][1 - colorDraw],
+        gameName_1: ["Blue vs. Red", "Blue vs. Red"][colorDraw],
+        gameName_2: ["Blue vs. Red", "Blue vs. Red"][1 - colorDraw],
     };
 
     jsPsych.data.addProperties({
@@ -30,17 +30,73 @@ const exp = (function() {
 
    /*
     *
-    *   INSTRUCTIONS
+    *   FUNCS
     *
     */
 
+    const makeStimulus = function(tileFeatures, nFilled, phase, correct, inst) {
+
+        const tileClass = inst ? "tile-inst" : "tile";
+
+        const xPosArray = inst ? ["100px", "250px", "400px"] : ["180px", "400px", "620px"];
+
+        const fillColor = (nFilled == 3 && correct) ? "green" : "#D9D9D9";
+
+        const fillIdx = (nFilled == 3 && correct) ? 2 : nFilled;
+
+        let grid_html;
+        for (let i = 0; i < xPosArray.length; i++) {
+            if (i == 0) {
+                grid_html = `<div class="${tileClass}" style="background-color: white; border: 2px solid #D9D9D9; left:${xPosArray[i]}"></div>`;    
+            } else {
+                grid_html += `<div class="${tileClass}" style="background-color: white; border: 2px solid #D9D9D9; left:${xPosArray[i]}"></div>`;  
+            };
+        };
+
+        let filled_html = ''; 
+        for (let i = 0; i < nFilled; i++) {
+            if (i == 0) {
+                filled_html = `<div class="${tileClass}" style="background-color: ${fillColor}; left:${xPosArray[i]}"></div>`;    
+            } else {
+                filled_html += `<div class="${tileClass}" style="background-color: ${fillColor}; left:${xPosArray[i]}"></div>`;  
+            };
+        };
+
+        let tile_html;
+        if (phase == "response") {
+            tile_html = `<div class="${tileClass}" style="background-color: ${fillColor}; left: ${xPosArray[fillIdx]}; border: 5px ${tileFeatures[2]} black"></div><div class="stroop-stim" style="color: ${tileFeatures[1]}; left: ${xPosArray[fillIdx]}"> ${tileFeatures[0]} </div>`;
+        } else if (phase == "outcome") {
+            tile_html = `<div class="${tileClass}" style="background-color: ${fillColor}; left: ${xPosArray[fillIdx]}"></div><div class="stroop-stim" style="color: #D9D9D9; left:${xPosArray[fillIdx]}"></div>`;
+        };
+
+        let stim_html = (phase == "response" || correct && phase == "outcome") ? grid_html + filled_html + tile_html : grid_html + filled_html;
+
+        return stim_html;
+    };
+
+   /*
+    *
+    *   INSTRUCTIONS
+    *
+    */
+    const emptyGrid_html = makeStimulus(null, 0, null, null, true);
+    const solidTile_html = makeStimulus([settings.colorNames_1[0], settings.colorHex_1[1], 'solid', 'q'], 0, "response", null, true);
+    const solidTile2_html = makeStimulus([settings.colorNames_1[1], settings.colorHex_1[0], 'solid', 'q'], 0, "response", null, true);
+    const dashedTile_html = makeStimulus([settings.colorNames_1[0], settings.colorHex_1[1], 'dashed', 'q'], 0, "response", null, true);
+    const dashedTile2_html = makeStimulus([settings.colorNames_1[1], settings.colorHex_1[0], 'dashed', 'q'], 0, "response", null, true);
+    const oneFilled_html = makeStimulus(null, 1, null, null, true);
+    const lives_2 = '<div class="life1-inst"><img width="80px"; height="80px"; src="./img/life.png"></div>' + '<div class="life2-inst"><img width="80px"; height="80px"; src="./img/life.png"></div>';
+    const lives_1 = '<div class="life1-inst"><img width="80px"; height="80px"; src="./img/death.png"></div>' + '<div class="life2-inst"><img width="80px"; height="80px"; src="./img/life.png"></div>';
+    const lives_0 = '<div class="life1-inst"><img width="80px"; height="80px"; src="./img/death.png"></div>' + '<div class="life2-inst"><img width="80px"; height="80px"; src="./img/death.png"></div>';
+
     function MakeAttnChk(settings, round) {
 
+        let secondVersion = (round == 2) ? ' the second version of ' : ' ';
         let incorrectA = (settings.gameType == "streak") ? `30 tokens` : `10 tokens`;
-        let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `15% of the time.`;
-        let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `15% of the time.`;
+        let pctA_1 = (settings.difficulty[0] == "hard") ? `50% of the time.` : `90% of the time.`;
+        let pctA_2 = (settings.difficulty[1] == "hard") ? `50% of the time.` : `90% of the time.`;
 
-        let correctAnswers_1 = [incorrectA, `0 tokens`, `20%`, `20%`, `I'll miss if I respond too slowly.`, pctA_1];
+        let correctAnswers_1 = [incorrectA, `0 tokens`, pctA_1];
         let correctAnswers_2 = [pctA_2];
 
         let attnChk;
@@ -53,15 +109,16 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you get a hit, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you win, you'll earn...</div>", 
                         name: `attnChk1`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you miss, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you lose, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
+                    /*
                     {
                         prompt: "<div style='color: rgb(109, 112, 114)'>After each hit or miss, what are your chances of winning 5 extra tokens?</div>", 
                         name: `attnChk3`, 
@@ -77,10 +134,11 @@ const exp = (function() {
                         name: `attnChk5`, 
                         options: [`I can take as long as I want to respond to each tile.`, `I'll miss if I respond too slowly.`],
                     },
+                    */
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players miss?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players win?`, 
                         name: `attnChk6`, 
-                        options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
+                        options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -97,15 +155,16 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you miss after achieving a streak of three, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you lose after achieving a streak of three, you'll earn...</div>", 
                         name: `attnChk1`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>If you miss after failing to start a streak, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>If you lose after failing to start a streak, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
+                    /*
                     {
                         prompt: "<div style='color: rgb(109, 112, 114)'>After each streak, what are your chances of winning 5 extra tokens?</div>", 
                         name: `attnChk3`, 
@@ -121,10 +180,11 @@ const exp = (function() {
                         name: `attnChk5`, 
                         options: [`I can take as long as I want to respond to each tile.`, `I'll miss if I respond too slowly.`],
                     },
+                    */
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players miss?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often to players fill all three slots?`, 
                         name: `attnChk6`, 
-                        options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
+                        options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -141,9 +201,9 @@ const exp = (function() {
                     </div>`,
                 questions: [
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_2}, how often do players miss?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In the second version of ${settings.gameName_1}, how often do players fill all three slots?`, 
                         name: `attnChk7`, 
-                        options: [`0% of the time.`, `15% of the time.`, `50% of the time.`, `85% of the time.`],
+                        options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
                     },
                 ],
                 scale_width: 500,
@@ -191,30 +251,37 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<div class='parent'>
-                        <p>In ${settings.gameName_1}, players earn 10 tokens for every hit.</p>
-                        <p>Players earn 0 tokens for every miss.</p>
-                        </div>`,
+                        prompt: `<p>In ${settings.gameName_1}, players earn 10 tokens for every win. Specifically, each time you fill all three slots, you'll earn 10 tokens.</p>
+                        <p>Players earn 0 tokens for every loss.</p>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>For example, if you get a hit, you'll see this message indicating that you earned 10 tokens.</p> 
-                        <div class="play-area-inst" style="border:0px solid white">               
+                        prompt: `<p>If you win, you'll see this message indicating that you earned 10 tokens.</p> 
+                        <div class="play-area-inst">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you miss, you'll see this message indicating that you earned 0 tokens.</p> 
-                        <div class="play-area-inst" style="border:0px solid white">               
+                        prompt: `<p>If you lose, you'll see this message indicating that you earned 0 tokens.</p> 
+                        <div class="play-area-inst">               
                             <div class="loss-text-inst">+0 Tokens</div>
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
+                /*
                 [
                     {
                         type: 'html',
@@ -226,8 +293,8 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after a hit:</p>
-                        <div class="play-area-inst" style="border:0px solid white">               
+                        prompt: `<p>If you see "+5 Bonus," this means you randomly won 5 extra tokens. For example, this is what you'd see if you randomly won 5 extra tokens after filling all three slots:</p>
+                        <div class="play-area-inst">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
                         </div>`,
@@ -236,8 +303,8 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after a miss.</p>
-                        <div class="play-area-inst" style="border:0px solid white">               
+                        prompt: `<p>This is what you'd see if you randomly won 5 extra tokens after failing to fill all three slots.</p>
+                        <div class="play-area-inst">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="plus-text-inst">+5 Bonus</div>
                         </div>`,
@@ -246,8 +313,8 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after a hit:</p>
-                        <div class="play-area-inst" style="border:0px solid white">               
+                        prompt: `<p>If you see "-5 Loss," this means you randomly lost 5 tokens. For example, this is what you'd see if you randomly lost 5 tokens after filling all three slots:</p>
+                        <div class="play-area-inst">               
                             <div class="win-text-inst" style="color:green">+10 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
                         </div>`
@@ -256,24 +323,18 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>This is what you'd see if you randomly lost 5 tokens after a miss:</p>
-                        <div class="play-area-inst" style="border:0px solid white">               
+                        prompt: `<p>This is what you'd see if you randomly lost 5 tokens after failing to fill all three slots:</p>
+                        <div class="play-area-inst">               
                             <div class="loss-text-inst">+0 Tokens</div>
                             <div class="minus-text-inst">-5 Loss</div>,
                         </div>`
                     },
                 ],
+                */
                 [
                     {
                         type: 'html',
-                        prompt: `<p><b>WARNING: During ${settings.gameName_1}, you must respond to each tile as fast as possible!</b></p>
-                        <p>Each tile will disappear very quickly. If you fail to respond before a tile disappears, your response will be considered a miss.</p>`
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>In ${settings.gameName_1}, most players miss the tile <b>${settings.pctCorrect[0]}</b> of the time.`
+                        prompt: `<p>In ${settings.gameName_1}, most players fill all three slots <b>${settings.pctCorrect[0]}</b> of the time.`
                     },
                 ],
             ],
@@ -295,52 +356,72 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In ${settings.gameName_1}, players earn tokens for streaks of consecutive hits.</p>
-                        <p>Specifically, players earn 10 tokens for every consecutive hit.</p>
-                        <p>For example, a streak of 2 consecutive hits is worth 20 tokens, 
-                        a streak of 3 consecutive hits is worth 30 tokens, and so on.</p>`,
+                        prompt: `<p>In ${settings.gameName_1}, players earn tokens for streaks of consecutive wins.</p>
+                        <p>Specifically, you'll earn 10 tokens for every consecutive round in which you fill all three slots.</p>
+                        <p>For example, a streak of 2 consecutive wins is worth 20 tokens, 
+                        a streak of 3 consecutive wins is worth 30 tokens, and so on.</p>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Each time you get a hit, you'll see the length of your current streak.</p>`
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>For example, if you get three hits in a row, you'll see this message:</p> 
-                        <div class="play-area-inst" style="border:0px solid white">    
-                            <div class="streak-title-text" style="font-size:45px">Current Streak:</div> 
-                            <div class="streak-number-text" style="font-size:60px">3</div>                                               
+                        prompt: `<p>Throughout the game, you'll see the length of your current streak at the top of the play area.
+                        For example, if you win 3 rounds in a row, you'll see the following:</p> 
+                        <div class="play-area-inst">   
+                            <div class="header-title" style="font-size:30px">Current Streak: 3</div>
+                            ${emptyGrid_html}
+                            ${lives_2}        
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Each time you miss, you'll see how many tokens you earned from your streak.</p>`
-                    },
-                ],
-                [
-                    {
-                        type: 'html',
-                        prompt: `<p>For example, if you miss after achieving a streak of three, you'll see this message indicating that you earned 30 tokens.</p> 
-                        <div class="play-area-inst" style="border:0px solid white">    
-                            <div class="win-text-inst" style="color:green">+30 Tokens</div>
+                        prompt: `<p>Each time you lose, you'll see how many tokens you earned from your streak.</p> 
+                        <div class="play-area-inst">   
+                            <div class="header-title" style="font-size:30px">Current Streak: 3</div>
+                            ${emptyGrid_html}
+                            ${lives_2}        
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>If you miss after failing to start a streak, you'll see this message indicating that you earned 0 tokens.</p> 
-                        <div class="play-area-inst" style="border:0px solid white">    
-                            <div class="loss-text-inst">+0 Tokens</div>
+                        prompt: `<p>For example, if you lose after achieving a streak of three, you'll see this message indicating that you earned 30 tokens.</p> 
+                        <div class="play-area-inst">   
+                            <div class="header-title" style="font-size:30px">Final Streak: 3</div>
+                            <div class="win-text-inst" style="color:green">+30 Tokens</div>   
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
                         </div>`,
                     },
                 ],
+                [
+                    {
+                        type: 'html',
+                        prompt: `<p>If you lose after failing to start a streak, you'll see this message indicating that you earned 0 tokens.</p> 
+                        <div class="play-area-inst">   
+                            <div class="header-title" style="font-size:30px">Final Streak: 0</div>
+                            <div class="loss-text-inst">+0 Tokens</div>   
+                        </div>
+                        <div class="keycodes-inst">
+                            <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div>"${settings.colorNames_1[0]}"</div>
+                            <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div>"${settings.colorNames_1[1]}"</div>
+                        </div>`,
+                    },
+                ],
+                /*
                 [
                     {
                         type: 'html',
@@ -396,10 +477,11 @@ const exp = (function() {
                         <p>Each tile will disappear very quickly. If you fail to respond before a tile disappears, your response will be considered a miss.</p>`
                     },
                 ],
+                */
                 [
                     {
                         type: 'html',
-                        prompt: `<p>In ${settings.gameName_1}, most players miss the tile <b>${settings.pctCorrect[0]}</b> of the time.`
+                        prompt: `<p>In ${settings.gameName_1}, most players fill all three slots <b>${settings.pctCorrect[0]}</b> of the time.`
                     },
                 ],
             ],
@@ -412,15 +494,15 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>Practice is now complete.</p>
-                        <p>Continue to learn more about ${settings.gameName_2}</p>`
+                        prompt: `<p>The first version of ${settings.gameName_1} is now complete!</p>
+                        <p>Soon, you'll continue earning tokens by playing a second version of ${settings.gameName_1}.</p>`
                     },
                 ],
                 [
                     {
                         type: 'html',
-                        prompt: `<p>${settings.gameName_2} is designed to be ${settings.harderOrEasier} than ${settings.gameName_1}.</p>
-                        <p>Specifically, in ${settings.gameName_2}, most players miss the tile <b>${settings.pctCorrect[1]}</b> of the time.</p>`
+                        prompt: `<p>The second version of ${settings.gameName_1} is identical to the first version with one exception: It is designed to be ${settings.harderOrEasier}.</p>
+                        <p>Specifically, in the second version of ${settings.gameName_1}, most players fill all three slots <b>${settings.pctCorrect[1]}</b> of the time.</p>`
                     },
                 ],
             ],
@@ -451,7 +533,7 @@ const exp = (function() {
                 [
                     {
                         type: 'html',
-                        prompt: `<p>You're now ready to play ${[settings.gameName_1, settings.gameName_2][round - 1]}.</p>
+                        prompt: `<p>You're now ready to play${secondVersion}${settings.gameName_1}.</p>
                         <p><b>Remember, the more tokens you earn, the better your chances of winning $100.00 bonus!</b></p>
                         <p>To begin, continue to the next screen.</p>`
                     },
@@ -464,7 +546,6 @@ const exp = (function() {
         this.timeline = [instLoop, readyToPlay];
        
     };
-
 
     p.consent = {
         type: jsPsychExternalHtml,
@@ -484,11 +565,14 @@ const exp = (function() {
                     <p>To learn about and play the first game, continue to the next screen.</p></p>`
                 },
             ],
+
             [
                 {
                     type: 'html',
-                    prompt: `<p>The first came is called ${settings.gameName_1}. It takes place in a play area like this one:</p>
+                    prompt: `<p>The first game is called ${settings.gameName_1}. It takes place in a play area like this one:</p>
                     <div class="play-area-inst">
+                        ${emptyGrid_html}
+                        ${lives_2}
                     </div>`
                 },
             ],
@@ -496,9 +580,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>Throughout the game, tiles will appear in the play area. On each tile, 
-                    you'll see the word "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}" written in either ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]} font. Proceed to see some examples.</p>
+                    prompt: `<p>The play area contains two hearts, each representing a life. It also contains three empty slots. Your job is to fill all three slots before losing your two lives.</p>
                     <div class="play-area-inst">
+                        ${emptyGrid_html}
+                        ${lives_2}
                     </div>`
                 },
             ],
@@ -506,10 +591,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "${settings.colorNames_1[0]}" in ${settings.colorNames_1[0]} font.</p>
+                    prompt: `<p>Filling slots is a two-step process.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:25%; left:20%">${settings.colorNames_1[0]}</div>
+                        ${emptyGrid_html}
+                        ${lives_2}
                     </div>`
                 },
             ],
@@ -517,10 +602,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "${settings.colorNames_1[0]}" in ${settings.colorNames_1[1]} font.</p>
+                    prompt: `<p>First, a tile will appear on one of the slots. The tile will display one of two words: "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}". Here is an example:</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:25%; left:80%">${settings.colorNames_1[0]}</div>
+                        ${solidTile_html}
+                        ${lives_2}
                     </div>`
                 },
             ],
@@ -528,31 +613,11 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>This tile displays the word "${settings.colorNames_1[1]}" in ${settings.colorNames_1[1]} font.</p>
+                    prompt: `<p>Second, you must indicate whether the word on the tile is "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}".
+                    Press Q on your keyboard if the word is "${settings.colorNames_1[0]}," and press P if the word is "${settings.colorNames_1[1]}".</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:75%; left:20%">${settings.colorNames_1[1]}</div>
-                    </div>`
-                },
-            ],
-
-            [
-                {
-                    type: 'html',
-                    prompt: `<p>This tile displays the word "${settings.colorNames_1[1]}" in ${settings.colorNames_1[0]} font.</p>
-                    <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:75%; left:80%">${settings.colorNames_1[1]}</div>
-                    </div>`
-                },
-            ],
-
-            [
-                {
-                    type: 'html',
-                    prompt: `<p>When a tile appears at the <b>bottom</b> of the play area, you must indicate whether the <b>word is "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}"</b> (ignoring the font color).
-                    Press Q on your keyboard if the word is "${settings.colorNames_1[0]}," and press P if the word is "${settings.colorNames_1[1]}."
-                    <div class="play-area-inst">
+                        ${solidTile_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
                         <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
@@ -564,10 +629,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>For example, you should respond to this tile by pressing Q.</p>
+                    prompt: `<p>For example, you should respond to this tile be pressing Q.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:75%; left:80%">${settings.colorNames_1[0]}</div>
+                        ${solidTile_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
                         <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
@@ -579,10 +644,10 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>You should respond to this tile by pressing P.</p>
+                    prompt: `<p>You should respond to this tile be pressing P.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:75%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:75%; left:20%">${settings.colorNames_1[1]}</div>
+                        ${solidTile2_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
                         <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
@@ -594,34 +659,52 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>If you respond correctly, you'll see this message indicating that you got a hit.</p>
-                    <div class="play-area-inst" style="border:0px solid white">
-                        <div class="win-text-inst" style="color:green">Hit!</div>
+                    prompt: `<p>You'll have just 1 second to respond before the tile disappears!</p>
+                    <div class="play-area-inst">
+                        ${solidTile2_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"></div>
-                        <div class="p-key"></div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
+
             [
                 {
                     type: 'html',
-                    prompt: `<p>If you respond incorrectly, you'll see this message indicating that you got a miss.</p>
-                    <div class="play-area-inst" style="border:0px solid white">
-                        <div class="loss-text-inst">Miss!</div>
+                    prompt: `<p>If you respond correctly before the tile disappears, the slot will be filled:
+                    <div class="play-area-inst">
+                        ${oneFilled_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"></div>
-                        <div class="p-key"></div>
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
                     </div>`
                 },
             ],
+
             [
                 {
                     type: 'html',
-                    prompt: `<p>To practice identifying the word on each tile, you'll complete a few practice rounds. During the practice rounds, tiles will always appear at the bottom of the play area, so your goal is always to
-                    identify whether the word is "${settings.colorNames_1[0]}" or "${settings.colorNames_1[1]}."</p>
+                    prompt: `<p>If you respond incorrectly or too slowly, the slot will stay empty and you'll lose a life:
+                    <div class="play-area-inst">
+                        ${emptyGrid_html}
+                        ${lives_1}
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key">Q<br>"${settings.colorNames_1[0]}"</div>
+                        <div class="p-key">P<br>"${settings.colorNames_1[1]}"</div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>Next, you'll complete a few practice rounds. Remember: Your goal is to fill all three slots before losing both lives.</p>
                     <p>Continue to start practicing.</p>`,
                 }
             ],
@@ -637,20 +720,37 @@ const exp = (function() {
                 {
                     type: 'html',
                     prompt: `<p>Practice is now complete.</p>
-                    <p>Next, you'll learn what happens when a tile appears at the top of the play area.</p>`
+                    <p>Next, you'll learn more about the rules of ${settings.gameName_1}.</p>`
                 },
             ],
 
             [
                 {
                     type: 'html',
-                    prompt: `<p>When a tile appears at the <b>top</b> of the play area, you must indicate whether the <b>font color is ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]}</b> (ignoring the word).
-                    Press Q if the font is ${settings.colorNames_1[0]}, and press P if the font is ${settings.colorNames_1[1]}.
+                    prompt: `<p>In ${settings.gameName_1}, some tiles will have a dashed border, like this one:</p>
                     <div class="play-area-inst">
+                        ${dashedTile_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"> Q<br><div class="${settings.colorNames_1[0]}-rec"></div> </div>
-                        <div class="p-key"> P<br><div class="${settings.colorNames_1[1]}-rec"></div> </div>
+                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div></div>
+                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div></div>
+                    </div>`
+                },
+            ],
+
+            [
+                {
+                    type: 'html',
+                    prompt: `<p>When the border is dashed, you must indicate whether the font color is ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]}</b> (ignoring the word).
+                    Press Q if the font is ${settings.colorNames_1[0]}, and press P if the font is ${settings.colorNames_1[1]}.</p>
+                    <div class="play-area-inst">
+                        ${dashedTile_html}
+                        ${lives_2}
+                    </div>
+                    <div class="keycodes-inst">
+                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div></div>
+                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div></div>
                     </div>`
                 },
             ],
@@ -660,12 +760,12 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>For example, you should respond to this tile by pressing P.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:80%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[1]}; top:25%; left:80%">${settings.colorNames_1[0]}</div>
+                        ${dashedTile_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div> </div>
-                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div> </div>
+                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div></div>
+                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div></div>
                     </div>`
                 },
             ],
@@ -675,12 +775,12 @@ const exp = (function() {
                     type: 'html',
                     prompt: `<p>You should respond to this tile by pressing Q.</p>
                     <div class="play-area-inst">
-                        <div class="tile-inst" style="background-color:#D9D9D9; top:25%; left:20%"></div>
-                        <div class="stroop-stim-inst" style="color:${settings.colorHex_1[0]}; top:25%; left:20%">${settings.colorNames_1[1]}</div>
+                        ${dashedTile2_html}
+                        ${lives_2}
                     </div>
                     <div class="keycodes-inst">
-                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div> </div>
-                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div> </div>
+                        <div class="q-key"> Q <div class="${settings.colorNames_1[0]}-rec"></div></div>
+                        <div class="p-key"> P <div class="${settings.colorNames_1[1]}-rec"></div></div>
                     </div>`
                 },
             ],
@@ -688,8 +788,7 @@ const exp = (function() {
             [
                 {
                     type: 'html',
-                    prompt: `<p>To practice identifying the font color on each tile, you'll complete a few practice rounds. During the practice rounds, tiles will always appear at the top of the play area, so your goal is always to
-                    identify whether the font is ${settings.colorNames_1[0]} or ${settings.colorNames_1[1]}.</p>
+                    prompt: `<p>Next, you'll complete another practice session. This time, all of the tiles will have a dashed border. Therefore, your only job will be to indicate the font color (ignoring the word).</p>
                     <p>Continue to start practicing.</p>`,
                 }
             ],
@@ -705,9 +804,8 @@ const exp = (function() {
                 {
                     type: 'html',
                     prompt: `<p>Practice is now complete.</p>
-                    <p>Now that you've practiced both tasks (naming words and identifying font colors), you'll practice doing both tasks at once.</p>
-                    <p>Specifically, in the next practice session, the tile will sometimes appear at the top of the play area (requiring you to identify the font color).
-                    Other times, the tile will appear at the bottom of the play area (requiring you to identify the word).</p>
+                    <p>Now that you've practiced naming words and identifying font colors, you'll practice doing both tasks at once.</p>
+                    <p>Specifically, in the next practice session, some tiles will have a solid border (requiring you to identify the word) and some will have a dashed border (requiring you to identify the font color).
                     <p>Continue when you're ready to practice performing both tasks at once.</p>`
                 },
             ],
@@ -845,68 +943,72 @@ const exp = (function() {
         let correct, stim;
         let trial = 1;
         let top = 1;
+        let episode = 0;
         const trialType1 = (settings.difficulty[round] == "easy") ? "congruent" : "incongruent";
-        const trialType2 = "doubleIncongruent";
+        const trialType2 = "incongruent";
         const trialType1_prob = (settings.difficulty[round] == "easy") ? .9 : .5;
 
-        const congruentStim_top = [
-            [colorNames[0], colorHex[0], '20%', '20%', 'q'], 
-            [colorNames[1], colorHex[1], '80%', '20%', 'p'], 
+        // stimulus arrays
+        const congruentStim_word = [
+            [colorNames[0], colorHex[0], 'solid', 'q'], 
+            [colorNames[1], colorHex[1], 'solid', 'p'],
+            [colorNames[0], colorHex[0], 'solid', 'q'], 
+            [colorNames[1], colorHex[1], 'solid', 'p'],
+            [colorNames[0], colorHex[0], 'solid', 'q'], 
+            [colorNames[1], colorHex[1], 'solid', 'p'],
+            [colorNames[0], colorHex[0], 'solid', 'q'], 
+            [colorNames[1], colorHex[1], 'solid', 'p'],
         ];
 
-        const congruentStim_bottom = [
-            [colorNames[0], colorHex[0], '20%', '80%', 'q'], 
-            [colorNames[1], colorHex[1], '80%', '80%', 'p'],
+        const congruentStim_color = [
+            [colorNames[0], colorHex[0], 'dashed', 'q'], 
+            [colorNames[1], colorHex[1], 'dashed', 'p'], 
+            [colorNames[0], colorHex[0], 'dashed', 'q'], 
+            [colorNames[1], colorHex[1], 'dashed', 'p'],
+            [colorNames[0], colorHex[0], 'dashed', 'q'], 
+            [colorNames[1], colorHex[1], 'dashed', 'p'], 
+            [colorNames[0], colorHex[0], 'dashed', 'q'], 
+            [colorNames[1], colorHex[1], 'dashed', 'p'], 
         ];
 
-        const incongruentStim_top = [
-            [colorNames[0], colorHex[0], '80%', '20%', 'q'], 
-            [colorNames[0], colorHex[1], '80%', '20%', 'p'], 
-            [colorNames[1], colorHex[1], '20%', '20%', 'p'], 
-            [colorNames[1], colorHex[0], '20%', '20%', 'q'], 
+        const incongruentStim_word = [
+            [colorNames[0], colorHex[1], 'solid', 'q'], 
+            [colorNames[1], colorHex[0], 'solid', 'p'], 
         ];
 
-        const incongruentStim_bottom = [
-            [colorNames[0], colorHex[0], '80%', '80%', 'q'], 
-            [colorNames[0], colorHex[1], '20%', '80%', 'q'],
-            [colorNames[1], colorHex[1], '20%', '80%', 'p'],
-            [colorNames[1], colorHex[0], '80%', '80%', 'p'],
+        const incongruentStim_color = [
+            [colorNames[0], colorHex[1], 'dashed', 'p'], 
+            [colorNames[1], colorHex[0], 'dashed', 'q'], 
         ];
 
-        const doubleIncongruentStim_top = [
-            [colorNames[0], colorHex[1], '20%', '20%', 'p'], 
-            [colorNames[1], colorHex[0], '80%', '20%', 'q'], 
-        ];
+        let congruentStim = [...congruentStim_word, ...congruentStim_color, ...incongruentStim_word, ...incongruentStim_color];
 
-        const doubleIncongruentStim_bottom = [
-            [colorNames[0], colorHex[1], '80%', '80%', 'q'],
-            [colorNames[1], colorHex[0], '20%', '80%', 'p'],
-        ];
+        let congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
 
-        let practiceStim = [...congruentStim_top, ...incongruentStim_top];
-        if (practiceType == "word") { practiceStim = [...congruentStim_bottom, ...incongruentStim_bottom] };
+        let incongruentStim = [...incongruentStim_word, ...incongruentStim_color];
 
-        let congruentStim_shuffled = {
-            top: jsPsych.randomization.repeat(congruentStim_top, 1),
-            bottom: jsPsych.randomization.repeat(congruentStim_bottom, 1)
-        };
+        let incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
 
-        let incongruentStim_shuffled = {
-            top: jsPsych.randomization.repeat(incongruentStim_top, 1),
-            bottom: jsPsych.randomization.repeat(incongruentStim_bottom, 1),
-        };
-
-        let doubleIncongruentStim_shuffled = {
-            top: jsPsych.randomization.repeat(doubleIncongruentStim_top, 1),
-            bottom: jsPsych.randomization.repeat(doubleIncongruentStim_bottom, 1),
-        }
+        let practiceStim = (practiceType == "word") ? [...congruentStim_word, ...incongruentStim_word] : [...congruentStim_color, ...incongruentStim_color];
 
         let practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
 
+        // variables for streak condition
+        let streak = 0;
+        let finalStreak;
+
+        // variables for lives
+        let lives = 2;
+        let nCorrect = 0;
+
         // html
-        const headerViz = (gameType == 'bern' || isPractice) ? 'hidden' : 'hidden';
-        const playArea = '<div class="play-area">' + `<div class="header" style="visibility:${headerViz}">{headerContent}</div>` + '<div class="tile" style="background-color:{tileColor}; border:{borderStyle}; top:{yPos}; left:{xPos}"></div>' + '<div class="stroop-stim" style="color:{stimColor}; top:{yPos}; left:{xPos}">{stimContent}</div>' +'</div>';
-        const feedbackArea = '<div class="play-area" style="border:0px solid white">{token-text}{extra-text}</div>';
+        const lives_2 = '<div class="life1"><img width="120px"; height="120px"; src="./img/life.png"></div>' + '<div class="life2"><img width="120px"; height="120px"; src="./img/life.png"></div>';
+        const lives_1 = '<div class="life1"><img width="120px"; height="120px"; src="./img/death.png"></div>' + '<div class="life2"><img width="120px"; height="120px"; src="./img/life.png"></div>';
+        const lives_0 = '<div class="life1"><img width="120px"; height="120px"; src="./img/death.png"></div>' + '<div class="life2"><img width="120px"; height="120px"; src="./img/death.png"></div>';
+        const lives_array = [lives_0, lives_1, lives_2];
+        const headerViz = (gameType == 'bern' || isPractice) ? 'hidden' : 'visible';
+        const playArea = '<div class="play-area">' + `<div class="header-title" style="visibility:${headerViz}">{headerTitle}</div>` + `<div class="header-number" style="visibility:${headerViz}">{headerNumber}</div>` + '{tileContent}' + '{livesContent}' + '</div>';
+        const feedbackArea = `<div class="play-area"><div class="header-title" style="visibility:${headerViz}">{headerTitle}</div><div class="header-number" style="visibility:${headerViz}">{headerNumber}</div>{token-text}{extra-text}</div>`;
         const winText = '<div class="win-text">+10 Tokens</div>';
         const lossText = '<div class="loss-text">+0 Tokens</div>';
         const plusText = '<div class="plus-text">+5 Bonus</div>';
@@ -954,13 +1056,11 @@ const exp = (function() {
             return arr;
         };
 
-        let switchArray = makeSwitchArray();
-
         // make array of trial types
         const makeTrialTypeArray = function(trialType1, trialType2, trialType1_prob, nTrials) {
             const nTrialType1 = Math.round(10 * trialType1_prob);
             const nTrialType2 = 10 - nTrialType1;
-            const nChunks = Math.round(nTrials / 10);
+            const nChunks = 10;
             const miniArray1 = Array(nTrialType1).fill(trialType1);
             const miniArray2 = Array(nTrialType2).fill(trialType2);
             const chunk = miniArray1.concat(miniArray2);
@@ -977,14 +1077,13 @@ const exp = (function() {
         let trialTypeArray = makeTrialTypeArray(trialType1, trialType2, trialType1_prob, settings.nTrials);
         let trialTypeArray_combined = makeTrialTypeArray("congruent", "incongruent", .5, 20);
 
-        // variables for streak condition
-        let streak = 0;
-        let finalStreak;
+
 
         const iti = {
             type:jsPsychHtmlKeyboardResponse,
             stimulus: () => {
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', 'white').replace('{stimColor}', 'black').replace('{stimContent}', '') + keyLabels;
+                const tileContent = makeStimulus(null, nCorrect, "iti", correct, false);
+                return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives]) + keyLabels;
             },
             choices: "NO_KEYS",
             trial_duration: () => {
@@ -1001,60 +1100,32 @@ const exp = (function() {
         const response = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                if (isPractice && practiceType !== "combined") {
-                    stim = practiceStim_shuffled.pop()
-                } else if (practiceType == "combined") {
-                    top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
-                    if (trialTypeArray_combined[trial - 1] == "congruent") {
-                        stim = (top == 1) ? congruentStim_shuffled.top.pop() : congruentStim_shuffled.bottom.pop();
-                    } else if (trialTypeArray_combined[trial - 1] == "incongruent") {
-                        stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
-                    };
-                } else if (settings.difficulty[round] == 'easy') {
-                    top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
-                    if (trialTypeArray[trial - 1] == "congruent") {
-                        stim = (top == 1) ? congruentStim_shuffled.top.pop() : congruentStim_shuffled.bottom.pop();
-                    } else if (trialTypeArray[trial - 1] == "doubleIncongruent") {
-                        stim = (top == 1) ? doubleIncongruentStim_shuffled.top.pop() : doubleIncongruentStim_shuffled.bottom.pop();
-                    };
-                } else {
-                    top = (switchArray[trial - 1] == "stay") ? top : 1 - top * 1;
-                    if (trialTypeArray[trial - 1] == "doubleIncongruent") {
-                        stim = (top == 1) ? doubleIncongruentStim_shuffled.top.pop() : doubleIncongruentStim_shuffled.bottom.pop();
-                    } else if (trialTypeArray[trial - 1] == "incongruent") {
-                        stim = (top == 1) ? incongruentStim_shuffled.top.pop() : incongruentStim_shuffled.bottom.pop();
-                    };
-                };
-                return playArea.replace('{headerContent}', `Current Streak: ${streak}`).replace('{tileColor}', '#D9D9D9').replaceAll('{xPos}', stim[2]).replaceAll('{yPos}', stim[3]).replace('{stimColor}', stim[1]).replace('{stimContent}', stim[0]) + keyLabels;
-            },
-            trial_duration: () => {
-                let duration;
                 if (isPractice) {
-                    return 10000;
+                    if (practiceType !== "combined") {
+                        stim = practiceStim_shuffled.pop()
+                    } else {
+                        stim = congruentStim_shuffled.pop()
+                    };
                 } else {
-                    if (settings.difficulty[round] == "hard") {
-                        let penalty = Math.min(streak * 125, 500)
-                        duration = 1200 - penalty;
-                    } else if (settings.difficulty[round] == "easy") {
-                        let penalty = Math.min(streak * 50, 500)
-                        duration = 1200 - penalty;
-                    }
-                    return duration;
-                }
+                    if (settings.difficulty[round] == 'easy') {
+                        stim = congruentStim_shuffled.pop();
+                    } else {
+                        stim = incongruentStim_shuffled.pop();
+                    } 
+                };
+                const tileContent = makeStimulus(stim, nCorrect, "response", correct, false);
+                return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives]) + keyLabels;
             },
+            trial_duration: 1000,
             data: {phase: 'response', round: round + 1},
             on_finish: (data) => {
-                correct = (data.response == stim[4]) ? 1 : 0;
+                correct = (data.response == stim[3]) ? 1 : 0;
                 data.trial_idx = trial;
                 data.practice = isPractice;
                 data.correct = correct;
-                if (congruentStim_shuffled.top.length == 0 || congruentStim_shuffled.bottom.length == 0 || incongruentStim_shuffled.top.length == 0 || incongruentStim_shuffled.bottom.length == 0 || doubleIncongruentStim_shuffled.top.length == 0 || doubleIncongruentStim_shuffled.bottom.length == 0 || practiceStim_shuffled.length == 0) {
-                    congruentStim_shuffled.top = jsPsych.randomization.repeat(congruentStim_top, 1);
-                    congruentStim_shuffled.bottom = jsPsych.randomization.repeat(congruentStim_bottom, 1);
-                    incongruentStim_shuffled.top = jsPsych.randomization.repeat(incongruentStim_top, 1);
-                    incongruentStim_shuffled.bottom = jsPsych.randomization.repeat(incongruentStim_bottom, 1);
-                    doubleIncongruentStim_shuffled.top = jsPsych.randomization.repeat(doubleIncongruentStim_top, 1);
-                    doubleIncongruentStim_shuffled.bottom = jsPsych.randomization.repeat(doubleIncongruentStim_bottom, 1);
+                if (incongruentStim_shuffled.length == 0 || congruentStim_shuffled.length == 0 || practiceStim_shuffled.length == 0) {
+                    congruentStim_shuffled = jsPsych.randomization.repeat(congruentStim, 1);
+                    incongruentStim_shuffled = jsPsych.randomization.repeat(incongruentStim, 1);
                     practiceStim_shuffled = jsPsych.randomization.repeat(practiceStim, 1);
                 };
             },
@@ -1063,28 +1134,32 @@ const exp = (function() {
         const outcome = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
-                let tileColor = (correct == 1) ? 'green' : 'white';
-                let stimColor = 'white';
-                let stimContent = "&#x2713;"
-                let borderStyle = (correct == 1) ? null : null;
-                let outcome_html;
-                let hitOrMiss = (correct == 1) ? winText.replace("+10 Tokens", "Hit!") : lossText.replace('+0 Tokens', "Miss!");
-                return feedbackArea.replace('{token-text}', hitOrMiss).replace('{extra-text}', '');
+                let nCorrect_adjusted = (correct && nCorrect == 2) ? 3 : nCorrect;
+                const tileContent = makeStimulus(stim, nCorrect_adjusted, "outcome", correct, false);
+                return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives - (1 - correct)]) + keyLabels;            
             },
             choices: "NO_KEYS",
             trial_duration: 1000,
             data: {phase: 'outcome', round: round + 1},
             on_finish: (data) => {
                 if (correct == 1) {
-                    streak++;
-                    if (trial == settings.nTrials) {
-                        finalStreak = streak;
-                        streak = 0;
-                    };
+                    nCorrect++;
                 } else {
+                    lives--;
+                };
+
+                if (nCorrect == 3) {
+                    streak++;
+                    episode++;
+                } else if (lives == 0) {
+                    episode++;
+                };
+
+                if (episode == settings.nTrials || lives == 0) {
                     finalStreak = streak;
                     streak = 0;
-                };
+                }
+
                 data.trial_idx = trial;
                 data.practice = isPractice;
                 if (isPractice) { trial++ };
@@ -1095,28 +1170,51 @@ const exp = (function() {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: function() {
                 let standardFeedback;
-                if (correct == 1) {
+
+                if (nCorrect == 3) {
                     standardFeedback = winText;
-                    if (gameType == 'streak' && trial == settings.nTrials) {
+                    if (isPractice) {
+                        standardFeedback = winText.replace('+10 Tokens', `You won!`)
+                    } else if (gameType == 'streak' && episode == settings.nTrials) {
                         standardFeedback = winText.replace('10', `${10 * finalStreak}`)
                     };
-                } else if (gameType == 'bern') {
-                    standardFeedback = lossText;
-                } else if (finalStreak == 0) {
-                    standardFeedback = lossText;
-                } else if (finalStreak > 0) {
-                    standardFeedback = winText.replace('10', `${10 * finalStreak}`)
                 };
+
+                if (lives == 0) {
+                    if (isPractice) {
+                        standardFeedback = lossText.replace('+0 Tokens', `You lost!`)
+                    } else if (gameType == "bern") {
+                        standardFeedback = lossText;
+                    } else if (gameType == "streak") {
+                        standardFeedback = (finalStreak > 0) ? winText.replace('10', `${10 * finalStreak}`) : lossText;
+                    };
+                };
+                    
                 let bonusFeedbackType = (correct == 1) ? tokenArray_win.pop() : tokenArray_loss.pop();
                 let bonusFeedback = (bonusFeedbackType == 'plus') ? plusText : (bonusFeedbackType == 'minus') ? minusText : '';
-                if (gameType == 'streak' && correct == 1 && trial < settings.nTrials) {
-                    return feedbackArea.replace('{token-text}', `<div class="streak-title-text">Current Streak:</div>`).replace('{extra-text}', `<div class="streak-number-text">${streak}</div>`);
+
+                const tileContent = makeStimulus(stim, nCorrect, "tokens", correct, false);
+
+                if (lives > 0 && nCorrect < 3) {
+                    return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{tileContent}', tileContent).replace('{livesContent}', lives_array[lives]) + keyLabels;   
+                } else if (nCorrect == 3) {
+                    if (isPractice) {
+                        return feedbackArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;
+                    } else if (gameType == "bern") {
+                        return feedbackArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `${streak}`).replace('{token-text}', winText).replace('{extra-text}', '') + keyLabels;
+                    } else if (gameType == "streak") {
+                        if (episode == settings.nTrials) {
+                            return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;
+                        } else {
+                            return playArea.replace('{headerTitle}', `Current Streak:`).replace('{headerNumber}', `<span style="color:green; font-weight:bold">${streak}</span>`).replace('{tileContent}', '').replace('{livesContent}', '') + keyLabels;            
+                        }
+                    };
                 } else {
-                    return feedbackArea.replace('{token-text}', standardFeedback).replace('{extra-text}', bonusFeedback);
-                }
+                    return feedbackArea.replace('{headerTitle}', `Final Streak:`).replace('{headerNumber}', `${finalStreak}`).replace('{token-text}', standardFeedback).replace('{extra-text}', '') + keyLabels;
+                };
             },
             choices: "NO_KEYS",
-            trial_duration: 2250,
+            trial_duration: 3000,
             data: {phase: 'feedback', round: round + 1},
             on_finish: function(data) {
                 if (tokenArray_win.length == 0) {
@@ -1125,21 +1223,23 @@ const exp = (function() {
                 if (tokenArray_loss.length == 0) {
                     tokenArray_loss = makeTokenArray();
                 };
+                if (nCorrect == 3 || lives == 0) {
+                    nCorrect = 0;
+                    lives = 2;
+                };
+                console.log(episode);
                 data.trial_idx = trial;
                 trial++;
                 data.practice = isPractice;
+                if (isPractice && episode == 3 || !isPractice && episode == settings.nTrials) {
+                    episode = 0;
+                    jsPsych.endCurrentTimeline();
+                }
             },
         };
 
-        if (!isPractice) {
-            this.timeline = [iti, response, outcome, tokens];
-            this.repetitions = settings.nTrials;
-        } else {
-            this.timeline = [iti, response, outcome];
-            this.repetitions = (practiceType == "combined") ? 20 : 10;            
-        }
-
-
+        this.timeline = [iti, response, outcome, tokens];
+        this.repetitions = 100;
     };
 
     p.wordPractice = new MakeTimeline(0, settings.gameType, true, "word", settings.colorNames_1, settings.colorHex_1);
@@ -1274,11 +1374,11 @@ const exp = (function() {
 
     // timeline: second wheel
     p.leftOrRight_timeline_1 = {
-        timeline: [attnChk1, flanker_timeline_1, new MakeFlowQs(1), new MakeEnjoyQs(1), new MakeEffortQs(1)],
+        timeline: [ attnChk1, flanker_timeline_1, new MakeFlowQs(1), new MakeEnjoyQs(1), new MakeEffortQs(1)],
     };
 
     p.leftOrRight_timeline_2 = {
-        timeline: [attnChk2, flanker_timeline_2, new MakeFlowQs(2), new MakeEnjoyQs(2), new MakeEffortQs(2)],
+        timeline: [ attnChk2, flanker_timeline_2, new MakeFlowQs(2), new MakeEnjoyQs(2), new MakeEffortQs(2)],
     };
 
    /*
@@ -1466,7 +1566,7 @@ const exp = (function() {
 
 }());
 
-const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice, exp.leftOrRight_timeline_1, 
-    exp.intro_round2, exp.combinedPractice2, exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
+const timeline = [exp.consent, exp.intro_wordReading, exp.wordPractice, exp.intro_colorNaming, exp.colorPractice, exp.intro_combined, exp.combinedPractice, exp.leftOrRight_timeline_1,
+    exp.leftOrRight_timeline_2, exp.demographics, exp.save_data];
 
 jsPsych.run(timeline);

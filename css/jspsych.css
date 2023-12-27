@@ -742,29 +742,81 @@
     border: 2px solid black;
 }
 
-.header {
+.header-title {
     position: absolute;
-    top: 5%;
+    top: 8%;
     left: 50%;
     transform: translate(-50%, -50%); 
     font-size: 40px;
 }
 
+.header-number {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    font-size: 60px;
+}
+
 .tile {
     position: absolute;
     border: null;
-    width: 175px; 
-    height: 175px;
+    z-index: -1;
+    width: 170px; 
+    height: 170px;
     top: 50%;
-    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.life1 {
+    position: absolute;
+    border: null;
+    z-index: -1;
+    width: 100px; 
+    height: 100px;
+    top: 80%;
+    left: 330px;
+    transform: translate(-50%, -50%);
+}
+
+.life2 {
+    position: absolute;
+    border: null;
+    z-index: -1;
+    width: 100px; 
+    height: 100px;
+    top: 80%;
+    left: 450px;
+    transform: translate(-50%, -50%);
+}
+
+.life1-inst {
+    position: absolute;
+    border: null;
+    z-index: -1;
+    width: 100px; 
+    height: 100px;
+    top: 85%;
+    left: 210px;
+    transform: translate(-50%, -50%);
+}
+
+.life2-inst {
+    position: absolute;
+    border: null;
+    z-index: -1;
+    width: 100px; 
+    height: 100px;
+    top: 85%;
+    left: 290px;
     transform: translate(-50%, -50%);
 }
 
 .tile-inst {
     position: absolute;
     border: null;
-    width: 125px; 
-    height: 125px;
+    width: 120px; 
+    height: 120px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
