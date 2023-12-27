@@ -136,7 +136,7 @@ const exp = (function() {
                     },
                     */
                     {
-                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players win?`, 
+                        prompt: `<div style='color: rgb(109, 112, 114)'>In ${settings.gameName_1}, how often do players fill all three slots?`, 
                         name: `attnChk6`, 
                         options: [`10% of the time.`, `50% of the time.`, `90% of the time.`],
                     },
