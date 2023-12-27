@@ -114,7 +114,7 @@ const exp = (function() {
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
                     {
-                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you fill all three slots, you'll earn...</div>", 
+                        prompt: "<div style='color: rgb(109, 112, 114)'>Each time you fail to fill all three slots, you'll earn...</div>", 
                         name: `attnChk2`, 
                         options: [`0 tokens`, `10 tokens`, `20 tokens`, `30 tokens`],
                     },
