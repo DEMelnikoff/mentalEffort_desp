@@ -804,7 +804,7 @@ const exp = (function() {
                 {
                     type: 'html',
                     prompt: `<p>Practice is now complete.</p>
-                    <p>Now that you've practiced naming words and identifying font colors, you'll practice doing both tasks at once.</p>
+                    <p>Now that you've practiced naming words and identifying colors, you'll practice doing both tasks at once.</p>
                     <p>Specifically, in the next practice session, some tiles will have a solid border (requiring you to identify the word) and some will have a dashed border (requiring you to identify the font color).
                     <p>Continue when you're ready to practice performing both tasks at once.</p>`
                 },
@@ -1231,7 +1231,7 @@ const exp = (function() {
                 data.trial_idx = trial;
                 trial++;
                 data.practice = isPractice;
-                if (isPractice && episode == 3 || !isPractice && episode == settings.nTrials) {
+                if (isPractice && episode == 4 || !isPractice && episode == settings.nTrials) {
                     episode = 0;
                     jsPsych.endCurrentTimeline();
                 }
