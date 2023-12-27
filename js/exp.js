@@ -1243,7 +1243,6 @@ const exp = (function() {
             choices: "NO_KEYS",
             trial_duration: () => {
                 let latency = roundOutcome ? 3000 : 0;
-                console.log(latency, roundOutcome);
                 return latency
             },
             data: {phase: 'feedback', round: round + 1},
