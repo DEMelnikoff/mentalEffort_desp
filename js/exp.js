@@ -1227,7 +1227,6 @@ const exp = (function() {
                     nCorrect = 0;
                     lives = 2;
                 };
-                console.log(episode);
                 data.trial_idx = trial;
                 trial++;
                 data.practice = isPractice;
